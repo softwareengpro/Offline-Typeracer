@@ -40,10 +40,14 @@ class Ui_Form(object):
         self.editPara = QtGui.QTextEdit(Form)
         self.editPara.setGeometry(QtCore.QRect(170, 300, 371, 121))
         self.editPara.setObjectName(_fromUtf8("editPara"))
+        self.editPara.textChanged.connect(self.text_changed)
         #self.editPara.textCursor().insertHtml('normal text')
-        mytext = self.editPara.toPlainText()
-        print mytext
-        self.editPara.textCursor().insertHtml('<b>mytext</b>')
+        #self.editPara.setReadOnly(True)
+        #self.mytext = self.editPara.toPlainText()
+        #QString *mytext = self.editPara->toPlainText();
+        #print self.mytext
+        #self.editPara.setReadOnly(False)
+        #self.editPara.textCursor().insertHtml('<b></b>')
 
         self.label_2 = QtGui.QLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(170, 110, 81, 16))
@@ -67,6 +71,12 @@ class Ui_Form(object):
         self.label_2.setText(_translate("Form", "Your Paragraph", None))
         self.finish.setText(_translate("Form", "Finish", None))
         self.Cancel.setText(_translate("Form", "Cancel", None))
+
+    def text_changed(self):
+        self.editPara.setReadOnly(True)
+        mytext = self.editPara.toPlainText()
+        #print mytext
+        self.editPara.setReadOnly(False)
 
     def closeApp(self):
         print "Cancel pressed"
