@@ -31,7 +31,8 @@ class Ui_Form(object):
         self.label.setObjectName(_fromUtf8("label"))
 
         self.showPara = QtGui.QTextEdit(Form)
-        self.showPara.setText("Anil")
+        self.st = "Anil"
+        self.showPara.setText(self.st)
         self.showPara.setGeometry(QtCore.QRect(170, 130, 371, 121))
         self.showPara.setObjectName(_fromUtf8("showPara"))
         self.showPara.setReadOnly(True)
@@ -75,7 +76,16 @@ class Ui_Form(object):
     def text_changed(self):
         self.editPara.setReadOnly(True)
         mytext = self.editPara.toPlainText()
+        l = len(mytext)
+        print l
+        print self.st[0:l]
+        if mytext == self.st[0:l]:
+            print "match"
+            #self.editPara.textCursor().insertHtml('<b>mytext</b>')
         #print mytext
+        else:
+            self.editPara.setTextColor(GlobalColor('255,0,0'));
+
         self.editPara.setReadOnly(False)
 
     def closeApp(self):
