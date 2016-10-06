@@ -30,6 +30,8 @@ class Ui_Form(object):
         self.label.setGeometry(QtCore.QRect(170, 280, 50, 14))
         self.label.setObjectName(_fromUtf8("label"))
 
+        self.finish_para = 0
+
         #Add progress bar
         self.progressBar = QtGui.QProgressBar(Form)
         self.progressBar.setGeometry(QtCore.QRect(230, 40, 118, 23))
@@ -47,7 +49,7 @@ class Ui_Form(object):
 
         # Add show text paragraph
         self.showPara = QtGui.QTextEdit(Form)
-        self.st = "Anil"
+        self.st = "Anil kumar"
         self.showPara.setText(self.st)
         self.showPara.setGeometry(QtCore.QRect(170, 130, 371, 121))
         self.showPara.setObjectName(_fromUtf8("showPara"))
@@ -58,6 +60,7 @@ class Ui_Form(object):
         self.editPara.setGeometry(QtCore.QRect(170, 300, 371, 121))
         self.editPara.setObjectName(_fromUtf8("editPara"))
         self.editPara.setReadOnly(True)
+        #if self.finish_para == 0:
         self.editPara.textChanged.connect(self.text_changed)
 
         self.label_2 = QtGui.QLabel(Form)
@@ -88,18 +91,24 @@ class Ui_Form(object):
     def text_changed(self):
         self.editPara.setReadOnly(True)
         mytext = self.editPara.toPlainText()
-        l = len(mytext)
-        #print l
-        #print self.st[0:l]
-        if mytext == self.st[0:l]:
-            print "match"
-            self.editPara.setStyleSheet("QTextEdit {color:black}")
-            #self.editPara.textCursor().insertHtml('<b>mytext</b>')
-        #print mytext
-        else:
-            self.editPara.setStyleSheet("QTextEdit {color:red}")
-
-        self.editPara.setReadOnly(False)
+        l=len(mytext)
+        k=len(self.st)
+        if k > l:
+            if mytext == self.st[0:l]:
+                print "match"
+                self.editPara.setStyleSheet("QTextEdit {color:black}")
+                '''if len(self.st) >= l:
+                                                        print ""                                     
+                                                        #self.editPara.setReadOnly(True)
+                                                    else:
+                                                        self.editPara.setReadOnly(False)'''
+            else:
+                self.editPara.setStyleSheet("QTextEdit {color:red}")
+            self.editPara.setReadOnly(False)
+        """else:
+                                    self.editPara.setText("")
+                                    #self.finish_para = 1
+                                    #self.editPara.setReadOnly(True)"""
 
     #function to update progress bar
     def update_progressbar(self, val):
