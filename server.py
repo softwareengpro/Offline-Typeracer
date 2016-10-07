@@ -27,21 +27,22 @@ def bind_socket():
 
 def accept_socket():
     c, addr=s.accept()
-    print "connected client is"+"IP" +addr[0] + "port" +addr[1]
+    print "connected client is",addr 
     send_msg(c)
     c.close()
 
 def send_msg(c):
-    while(true):
+    while(True):
+        print " send a msg to client"
         m=raw_input()
-        if(m=='quit'):
-            c.close()
-            s.close()
-            sys.exit()
-        if(len(str.encode(m)>0)):
-            c.send(str.encode(m))
-            client_responce=str(c.recv(1024),"utf-8")
-            print client_responce
+    if(m=='quit'):
+        c.close()
+        s.close()
+        sys.exit()
+    if(len(m)>0):
+        c.send(m)
+        client_responce=c.recv(1024)
+        print client_responce
         
 def main():
     create_socket()
