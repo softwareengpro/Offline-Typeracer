@@ -30,7 +30,7 @@ class Ui_Form(object):
         self.label.setGeometry(QtCore.QRect(170, 280, 50, 14))
         self.label.setObjectName(_fromUtf8("label"))
 
-        self.finish_para = 0
+        #self.finish_para = 0
 
         #Add progress bar
         self.progressBar = QtGui.QProgressBar(Form)
@@ -93,22 +93,18 @@ class Ui_Form(object):
         mytext = self.editPara.toPlainText()
         l=len(mytext)
         k=len(self.st)
-        if k > l:
+        print k
+        print l
+        if l <= k:
             if mytext == self.st[0:l]:
                 print "match"
                 self.editPara.setStyleSheet("QTextEdit {color:black}")
-                '''if len(self.st) >= l:
-                                                        print ""                                     
-                                                        #self.editPara.setReadOnly(True)
-                                                    else:
-                                                        self.editPara.setReadOnly(False)'''
             else:
                 self.editPara.setStyleSheet("QTextEdit {color:red}")
-            self.editPara.setReadOnly(False)
-        """else:
-                                    self.editPara.setText("")
-                                    #self.finish_para = 1
-                                    #self.editPara.setReadOnly(True)"""
+            if l < k:
+                self.editPara.setReadOnly(False)
+        else:
+            pass
 
     #function to update progress bar
     def update_progressbar(self, val):
