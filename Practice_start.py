@@ -25,7 +25,7 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(709, 558)
+        Form.resize(800, 600)
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(170, 280, 50, 14))
         self.label.setObjectName(_fromUtf8("label"))
@@ -49,7 +49,7 @@ class Ui_Form(object):
 
         # Add show text paragraph
         self.showPara = QtGui.QTextEdit(Form)
-        self.st = "Anil kumar"
+        self.st = "You have shown paragraph here to type"
         self.showPara.setText(self.st)
         self.showPara.setGeometry(QtCore.QRect(170, 130, 371, 121))
         self.showPara.setObjectName(_fromUtf8("showPara"))
