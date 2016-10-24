@@ -1,6 +1,7 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
 import selectSession, Practice_start
+#from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
 try:
@@ -71,26 +72,33 @@ class Ui_O(object):
         sec.practice_session.clicked.connect(self.sessionPractice)
 
     def sessionPractice(self):
+        #import Qtimer
     	self.obj.hide()
-    	prac = Practice_start.Ui_Form()
-    	prac.setupUi(self.obj)
-    	self.obj.show()
-    	timer = QTimer()
-    	timer.q = 0
-    	timer.timeout.connect(prac.startIn)
-    	timer.start(1000)
+        prac_sess = Practice_start.Ui_Form()
+        prac_sess.setupUi(self.obj)
+        self.obj.show()
+        #prac_sess.practice_session()
+        prac_sess.start_Timer()
+
+    	"""prac = Practice_start.Ui_Form()
+        prac.setupUi(self.obj)
+        self.obj.show()
+        timer = QTimer()
+        timer.q = 0
+        timer.timeout.connect(prac.startIn)
+        timer.start(1000)
 
         # app.exit()
 
-    """def newWindow(self):
+        def newWindow(self):
                         #import sys
                         #app = QtGui.QApplication(sys.argv)
-                        Form = QtGui.QWidget()
-                        ui = selectSession.Ui_Form()
-                        ui.setupUi(Form)
-                        Form.show()
+        Form = QtGui.QWidget()
+        ui = selectSession.Ui_Form()
+        ui.setupUi(Form)
+        Form.show()
                         #O.hide()
-                        sys.exit(app.exec_())"""
+        sys.exit(app.exec_())"""
 
 if __name__ == "__main__":
     import sys

@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QTimer
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -119,29 +120,43 @@ class Ui_Form(object):
         app.exit()
 
 
-    #function to start game in 4sec
+    #function to start game in 5sec
     def startIn(self):
+        print "not call startIn"
+        #q = self.timer.q
         if timer.q < 6:
             self.update_progressbar(timer.q)
             print 'tick'
             timer.q += 1
         else:
             self.editPara.setReadOnly(False)
+            #return q
 
-if __name__ == "__main__":
-    import sys
-    from PyQt4.QtCore import QTimer
-    app = QtGui.QApplication(sys.argv)
-    Form = QtGui.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
+    #function to start game withim timer
+    def start_Timer(self):
+        timer = QTimer()
+        #test = Ui_Form()
+        #print timer
+        print self
+        timer.q = 0
+        timer.timeout.connect(self.startIn)
+        timer.start(1000)
+        #print "timer"
+        print timer.isActive()
+
+
+"""def practice_session(self):
+                import sys
+                from PyQt4.QtCore 
+                app = QtGui.QApplication(sys.argv)
+                Form = QtGui.QWidget()
+                ui = Ui_Form()
+    self.setupUi(Form)
     Form.show()
-
-    #set timer
+                #set timer
     timer = QTimer()
     timer.q = 0
-    timer.timeout.connect(ui.startIn)
+    timer.timeout.connect(self.startIn)
     timer.start(1000)
-
-    sys.exit(app.exec_())
-
+         
+                #sys.exit(app.exec_())"""
