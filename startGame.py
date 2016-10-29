@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start
+import selectSession, Practice_start, wordMap, timeMap
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
@@ -68,8 +68,23 @@ class Ui_O(object):
         self.obj.show()
         self.startgame.hide()
         self.close.hide()
-        sec.close.clicked.connect(self.closeApp)   
-        sec.practice_session.clicked.connect(self.sessionPractice)
+        sec.close.clicked.connect(self.closeApp) 
+        sec.practice_session.clicked.connect(self.selectTopic)  
+        #sec.practice_session.clicked.connect(self.sessionPractice)
+
+    def selectTopic(self):
+        self.obj.hide()
+        topic = wordMap.Ui_Form()
+        topic.setupUi(self.obj)
+        self.obj.show()
+        topic.paragraph.clicked.connect(self.selectTimeMap)
+
+    def selectTimeMap(self):
+        self.obj.hide()
+        time = timeMap.Ui_Form()
+        time.setupUi(self.obj)
+        #Form.setEnabled(false)
+        self.obj.show()
 
     def sessionPractice(self):
         #import Qtimer
