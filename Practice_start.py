@@ -137,9 +137,10 @@ class Ui_Form(object):
         timer = QTimer()
         #test = Ui_Form()
         #print timer
+        ui = Ui_Form()
         print self
         timer.q = 0
-        timer.timeout.connect(self.startIn)
+        timer.timeout.connect(ui.startIn)
         timer.start(1000)
         #print "timer"
         print timer.isActive()

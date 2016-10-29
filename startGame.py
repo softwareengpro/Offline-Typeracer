@@ -78,7 +78,12 @@ class Ui_O(object):
         prac_sess.setupUi(self.obj)
         self.obj.show()
         #prac_sess.practice_session()
-        prac_sess.start_Timer()
+        #prac_sess.start_Timer()
+        timer = QTimer()
+        timer.q = 0
+        timer.timeout.connect(prac_sess.startIn)
+        timer.start(1000)
+        #prac_sess.startIn()
 
     	"""prac = Practice_start.Ui_Form()
         prac.setupUi(self.obj)
