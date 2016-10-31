@@ -33,22 +33,26 @@ class Ui_Form(object):
         font.setBold(True)
         font.setWeight(75)
         self.timeMap.setFont(font)
+
         self.timeMap.setObjectName(_fromUtf8("timeMap"))
         self.min1 = QtGui.QPushButton(Form)
         self.min1.setGeometry(QtCore.QRect(390, 210, 41, 27))
         self.min1.setObjectName(_fromUtf8("min1"))
+
         self.min2 = QtGui.QPushButton(Form)
         self.min2.setGeometry(QtCore.QRect(270, 300, 41, 27))
         self.min2.setObjectName(_fromUtf8("min2"))
+
         self.min3 = QtGui.QPushButton(Form)
         self.min3.setGeometry(QtCore.QRect(500, 300, 41, 27))
         self.min3.setObjectName(_fromUtf8("min3"))
-        self.back = QtGui.QPushButton(Form)
-        self.back.setGeometry(QtCore.QRect(60, 510, 51, 27))
-        self.back.setObjectName(_fromUtf8("back"))
-        self.close = QtGui.QPushButton(Form)
-        self.close.setGeometry(QtCore.QRect(660, 510, 51, 27))
-        self.close.setObjectName(_fromUtf8("close"))
+
+        """self.back = QtGui.QPushButton(Form)
+                                self.back.setGeometry(QtCore.QRect(60, 510, 51, 27))
+                                self.back.setObjectName(_fromUtf8("back"))
+                                self.close = QtGui.QPushButton(Form)
+                                self.close.setGeometry(QtCore.QRect(660, 510, 51, 27))
+                                self.close.setObjectName(_fromUtf8("close"))"""
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -59,8 +63,8 @@ class Ui_Form(object):
         self.min1.setText(_translate("Form", "1 Min", None))
         self.min2.setText(_translate("Form", "2 Min", None))
         self.min3.setText(_translate("Form", "3 Min", None))
-        self.back.setText(_translate("Form", "BACK", None))
-        self.close.setText(_translate("Form", "CLOSE", None))
+        #self.back.setText(_translate("Form", "BACK", None))
+        #self.close.setText(_translate("Form", "CLOSE", None))
 
 
 if __name__ == "__main__":

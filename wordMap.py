@@ -35,24 +35,29 @@ class Ui_Form(object):
         self.Chose_topic.setFont(font)
         self.Chose_topic.setMouseTracking(False)
         self.Chose_topic.setObjectName(_fromUtf8("Chose_topic"))
+
         self.paragraph = QtGui.QPushButton(Form)
         self.paragraph.setGeometry(QtCore.QRect(250, 230, 85, 27))
         self.paragraph.setObjectName(_fromUtf8("paragraph"))
+
         self.news = QtGui.QPushButton(Form)
         self.news.setGeometry(QtCore.QRect(460, 230, 85, 27))
         self.news.setObjectName(_fromUtf8("news"))
+
         self.gk = QtGui.QPushButton(Form)
         self.gk.setGeometry(QtCore.QRect(190, 330, 85, 27))
         self.gk.setObjectName(_fromUtf8("gk"))
+        
         self.audio = QtGui.QPushButton(Form)
         self.audio.setGeometry(QtCore.QRect(530, 330, 85, 27))
         self.audio.setObjectName(_fromUtf8("audio"))
-        self.back = QtGui.QPushButton(Form)
-        self.back.setGeometry(QtCore.QRect(40, 510, 51, 27))
-        self.back.setObjectName(_fromUtf8("back"))
-        self.close = QtGui.QPushButton(Form)
-        self.close.setGeometry(QtCore.QRect(720, 510, 41, 27))
-        self.close.setObjectName(_fromUtf8("close"))
+
+        """self.back = QtGui.QPushButton(Form)
+                                self.back.setGeometry(QtCore.QRect(40, 510, 51, 27))
+                                self.back.setObjectName(_fromUtf8("back"))
+                                self.close = QtGui.QPushButton(Form)
+                                self.close.setGeometry(QtCore.QRect(720, 510, 41, 27))
+                                self.close.setObjectName(_fromUtf8("close"))"""
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -64,8 +69,8 @@ class Ui_Form(object):
         self.news.setText(_translate("Form", "NEWS", None))
         self.gk.setText(_translate("Form", "GK", None))
         self.audio.setText(_translate("Form", "AUDIO", None))
-        self.back.setText(_translate("Form", "BACK", None))
-        self.close.setText(_translate("Form", "CLOSE", None))
+        #self.back.setText(_translate("Form", "BACK", None))
+        #self.close.setText(_translate("Form", "CLOSE", None))
 
 
 if __name__ == "__main__":

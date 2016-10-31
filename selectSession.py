@@ -33,11 +33,11 @@ class Ui_Form(object):
         self.acceptchallenge.setObjectName(_fromUtf8("acceptchallenge"))
 
         self.back = QtGui.QPushButton(Form)
-        self.back.setGeometry(QtCore.QRect(40, 440, 51, 27))
+        self.back.setGeometry(QtCore.QRect(60, 510, 51, 27))
         self.back.setObjectName(_fromUtf8("back"))
 
         self.close = QtGui.QPushButton(Form)
-        self.close.setGeometry(QtCore.QRect(610, 440, 51, 27))
+        self.close.setGeometry(QtCore.QRect(660, 510, 51, 27))
         self.close.setObjectName(_fromUtf8("close"))
         self.close.clicked.connect(self.closeApp)
 

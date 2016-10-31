@@ -63,62 +63,55 @@ class Ui_O(object):
         #s = QtGui.QWidget()
         #layout.removeWidget(self.obj)
 
-        sec = selectSession.Ui_Form()
-        sec.setupUi(self.obj)
+        #sessionMode = selectSession.Ui_Form()
+        sessionMode.setupUi(self.obj)
         self.obj.show()
         self.startgame.hide()
         self.close.hide()
-        sec.close.clicked.connect(self.closeApp) 
-        sec.practice_session.clicked.connect(self.selectTopic)  
-        #sec.practice_session.clicked.connect(self.sessionPractice)
+        sessionMode.close.clicked.connect(self.closeApp) 
+        sessionMode.practice_session.clicked.connect(self.selectTopic)  
 
     def selectTopic(self):
         self.obj.hide()
-        topic = wordMap.Ui_Form()
-        topic.setupUi(self.obj)
+        #wordObj = wordMap.Ui_Form()
+        sessionMode.practice_session.hide()
+        sessionMode.create_challenge.hide()
+        sessionMode.acceptchallenge.hide()
+        sessionMode.label.hide()
+        wordObj.setupUi(self.obj)
         self.obj.show()
-        topic.paragraph.clicked.connect(self.selectTimeMap)
+        wordObj.paragraph.clicked.connect(self.selectTimeMap)
 
     def selectTimeMap(self):
         self.obj.hide()
-        time = timeMap.Ui_Form()
-        time.setupUi(self.obj)
+        #print wordObj
+        wordObj.Chose_topic.hide()
+        wordObj.paragraph.hide()
+        wordObj.news.hide()
+        wordObj.gk.hide()
+        wordObj.audio.hide()
+        #mapTime = timeMap.Ui_Form()
+        mapTime.setupUi(self.obj)
+        mapTime.min1.clicked.connect(self.sessionPractice)
         #Form.setEnabled(false)
         self.obj.show()
 
     def sessionPractice(self):
         #import Qtimer
     	self.obj.hide()
-        prac_sess = Practice_start.Ui_Form()
+        #prac_sess = Practice_start.Ui_Form()
         prac_sess.setupUi(self.obj)
         self.obj.show()
-        #prac_sess.practice_session()
-        #prac_sess.start_Timer()
+        self.start_Timer()
+        prac_sess.practice_session()
+        prac_sess.start_Timer()
         timer = QTimer()
         timer.q = 0
-        timer.timeout.connect(prac_sess.startIn)
+        timer.timeout.connect(self.startIn)
+        #print "timer"
         timer.start(1000)
         #prac_sess.startIn()
 
-    	"""prac = Practice_start.Ui_Form()
-        prac.setupUi(self.obj)
-        self.obj.show()
-        timer = QTimer()
-        timer.q = 0
-        timer.timeout.connect(prac.startIn)
-        timer.start(1000)
-
-        # app.exit()
-
-        def newWindow(self):
-                        #import sys
-                        #app = QtGui.QApplication(sys.argv)
-        Form = QtGui.QWidget()
-        ui = selectSession.Ui_Form()
-        ui.setupUi(Form)
-        Form.show()
-                        #O.hide()
-        sys.exit(app.exec_())"""
 
 if __name__ == "__main__":
     import sys
@@ -128,14 +121,9 @@ if __name__ == "__main__":
     ui = Ui_O()
     ui.setupUi(O)
     O.show()
-    #layout = QtGui.QHBoxLayout(O)
-    #print layout
+    wordObj = wordMap.Ui_Form() #create an global object of wordMap
+    prac_sess = Practice_start.Ui_Form() #create an global object of practice_start session
+    sessionMode = selectSession.Ui_Form() #create an global object of select session
+    mapTime = timeMap.Ui_Form() #create an global object of timeMap
     app.exec_()
-    #print "hi"
-    # app = QtGui.QApplication(sys.argv)
-    # O = QtGui.QWidget()
-    # sec = Ui_Form()
-    # sec.setupUi(O)
-    # O.show()
-    # app.exec_()
     sys.exit(0)
