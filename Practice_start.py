@@ -8,6 +8,7 @@
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QTimer
+import random
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -30,7 +31,7 @@ class Ui_Form(object):
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(170, 280, 50, 14))
         self.label.setObjectName(_fromUtf8("label"))
-
+        #self.q = 0
         #self.finish_para = 0
 
         #Add progress bar
@@ -50,8 +51,6 @@ class Ui_Form(object):
 
         # Add show text paragraph
         self.showPara = QtGui.QTextEdit(Form)
-        self.st = "You have shown paragraph here to type"
-        self.showPara.setText(self.st)
         self.showPara.setGeometry(QtCore.QRect(170, 130, 371, 121))
         self.showPara.setObjectName(_fromUtf8("showPara"))
         self.showPara.setReadOnly(True)
@@ -122,29 +121,39 @@ class Ui_Form(object):
 
     #function to start game in 5sec
     def startIn(self):
+        #ui = Ui_Form()
         print "not call startIn"
         #q = self.timer.q
-        if timer.q < 6:
-            self.update_progressbar(timer.q)
+        if q < 6:
+            self.update_progressbar(q)
+            print self
             print 'tick'
-            timer.q += 1
+            q += 1
         else:
             self.editPara.setReadOnly(False)
             #return q
 
-    #function to start game withim timer
+    #function to start game within timer
     def start_Timer(self):
-        timer = QTimer()
+        #timer = QTimer()
         #test = Ui_Form()
         #print timer
-        ui = Ui_Form()
-        print self
-        timer.q = 0
-        timer.timeout.connect(ui.startIn)
-        timer.start(1000)
+        #ui = Ui_Form()
+        #print self
+        global q
+        q =0
+        #self.startIn(q)
+        #timer.timeout.connect(self.startIn)
+        #timer.start(1000)
         #print "timer"
-        print timer.isActive()
+        #print timer.isActive()
 
+    def tick(self):
+        print "self"
+        print "tick"
+
+if __name__ == "__main__":
+    ui = Ui_Form()
 
 """def practice_session(self):
                 import sys

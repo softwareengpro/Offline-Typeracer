@@ -1,5 +1,5 @@
 from PyQt4 import QtCore, QtGui
-import Practice_start
+import Practice_start, sys
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

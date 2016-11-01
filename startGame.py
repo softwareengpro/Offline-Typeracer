@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap
+import selectSession, Practice_start, wordMap, timeMap, random
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
@@ -40,6 +40,9 @@ class Ui_O(object):
         QtCore.QMetaObject.connectSlotsByName(O)
 
         self.obj = O
+        """print "object"
+                                print self.obj
+                                print O"""
 
     def retranslateUi(self, O):
         O.setWindowTitle(_translate("O", "OFFLINE TYPERACER", None))
@@ -96,20 +99,56 @@ class Ui_O(object):
         #Form.setEnabled(false)
         self.obj.show()
 
+    def tick(self):
+        print "self"
+        print "tick"
+
+    def startIn(self):
+        #ui = Ui_Form()
+        print "not call startIn"
+        #q = self.timer.q
+        if timer.q < 6:
+            prac_sess.update_progressbar(timer.q)
+            print self
+            print 'tick'
+            timer.q += 1
+        elif timer.q == 6:
+            self.selectParagraph()
+            timer.q = 7
+        else:
+            prac_sess.editPara.setReadOnly(False)
+
+    def selectParagraph(self):
+        lines = open('story.txt').read().splitlines()
+        #print(lines[10])
+        myline = ""
+        text = ""
+        while len(myline) <= 20:
+            myline =random.choice(lines)
+        while len(text) <= 20:
+            text = random.choice(lines)
+
+        prac_sess.showPara.setText(myline)
+            #prac_sess.st = str(myline + text + ".")
+        #print(myline + text + '.')
+       #self.st = "You have shown paragraph here to type"
+        #prac_sess.showPara.setText(prac_sess.st)
+
     def sessionPractice(self):
         #import Qtimer
     	self.obj.hide()
         #prac_sess = Practice_start.Ui_Form()
         prac_sess.setupUi(self.obj)
         self.obj.show()
-        self.start_Timer()
-        prac_sess.practice_session()
         prac_sess.start_Timer()
-        timer = QTimer()
-        timer.q = 0
         timer.timeout.connect(self.startIn)
-        #print "timer"
         timer.start(1000)
+        #self.start_Timer()
+        #prac_sess.practice_session()
+        #prac_sess.start_Timer()
+        #print(timer.start(1000))
+        #prac_sess.tick()
+        #print "timer"
         #prac_sess.startIn()
 
 
@@ -125,5 +164,7 @@ if __name__ == "__main__":
     prac_sess = Practice_start.Ui_Form() #create an global object of practice_start session
     sessionMode = selectSession.Ui_Form() #create an global object of select session
     mapTime = timeMap.Ui_Form() #create an global object of timeMap
+    timer = QTimer()
+    timer.q = 0
     app.exec_()
     sys.exit(0)
