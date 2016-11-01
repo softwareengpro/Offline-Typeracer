@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap, random
+import selectSession, Practice_start, wordMap, timeMap, random, re
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
@@ -105,11 +105,11 @@ class Ui_O(object):
 
     def startIn(self):
         #ui = Ui_Form()
-        print "not call startIn"
+        #print "not call startIn"
         #q = self.timer.q
         if timer.q < 6:
             prac_sess.update_progressbar(timer.q)
-            print self
+            #print self
             print 'tick'
             timer.q += 1
         elif timer.q == 6:
@@ -121,14 +121,22 @@ class Ui_O(object):
     def selectParagraph(self):
         lines = open('story.txt').read().splitlines()
         #print(lines[10])
-        myline = ""
-        text = ""
-        while len(myline) <= 20:
-            myline =random.choice(lines)
-        while len(text) <= 20:
-            text = random.choice(lines)
+        self.myline = ""
+        self.text = ""
+        while len(self.myline) <= 20:
+            self.myline = random.choice(lines)
+        while len(self.text) <= 20:
+            self.text = random.choice(lines)
 
-        prac_sess.showPara.setText(myline)
+        prac_sess.st = self.myline + self.text + '.'
+        prac_sess.st = prac_sess.st.replace('\xc2\xa0', ' ')
+        #self.myline = re.sub('r^[xc|e.*]', ' '. self.myline)
+        prac_sess.st = prac_sess.st.replace('\xe2\x80\x9c', ' ')
+        prac_sess.st = prac_sess.st.replace('\xe2\x80\x9d', ' ')
+        word = prac_sess.st.split(" ")
+        print word
+        print self.myline + self.text + '.'
+        prac_sess.showPara.setText(prac_sess.st)
             #prac_sess.st = str(myline + text + ".")
         #print(myline + text + '.')
        #self.st = "You have shown paragraph here to type"
