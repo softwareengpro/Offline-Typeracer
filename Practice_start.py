@@ -120,7 +120,23 @@ class Ui_Form(object):
 
 
     #function to start game in 5sec
-    def startIn(self):
+    def resultWindow(self):
+        layout = QHBoxLayout()
+        lineEdit = QLineEdit()
+        lineEdit.setText("Just to fill up the dialog")
+        layout.addWidget(lineEdit)         
+        self.widget = QWidget()
+        self.widget.setLayout(layout)  
+        self.setCentralWidget(self.widget)
+        self.setWindowTitle("Win2")
+        self.widget.show()
+
+    def tick(self):
+        print "self"
+        print "tick"
+
+
+"""    def startIn(self):
         #ui = Ui_Form()
         print "not call startIn"
         #q = self.timer.q
@@ -146,11 +162,7 @@ class Ui_Form(object):
         #timer.timeout.connect(self.startIn)
         #timer.start(1000)
         #print "timer"
-        #print timer.isActive()
-
-    def tick(self):
-        print "self"
-        print "tick"
+        #print timer.isActive()"""
 
 if __name__ == "__main__":
     ui = Ui_Form()

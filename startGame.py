@@ -40,9 +40,6 @@ class Ui_O(object):
         QtCore.QMetaObject.connectSlotsByName(O)
 
         self.obj = O
-        """print "object"
-                                print self.obj
-                                print O"""
 
     def retranslateUi(self, O):
         O.setWindowTitle(_translate("O", "OFFLINE TYPERACER", None))
@@ -84,6 +81,9 @@ class Ui_O(object):
         wordObj.setupUi(self.obj)
         self.obj.show()
         wordObj.paragraph.clicked.connect(self.selectTimeMap)
+        wordObj.news.clicked.connect(self.selectNews)
+        wordObj.gk.clicked.connect(self.currentAffairs)
+        wordObj.audio.clicked.connect(self.audioSection)
 
     def selectTimeMap(self):
         self.obj.hide()
@@ -96,6 +96,9 @@ class Ui_O(object):
         #mapTime = timeMap.Ui_Form()
         mapTime.setupUi(self.obj)
         mapTime.min1.clicked.connect(self.sessionPractice)
+        print mapTime.min1.clicked
+        mapTime.min2.clicked.connect(self.sessionPractice)
+        mapTime.min3.clicked.connect(self.sessionPractice)
         #Form.setEnabled(false)
         self.obj.show()
 
@@ -118,37 +121,57 @@ class Ui_O(object):
         else:
             prac_sess.editPara.setReadOnly(False)
 
-    def selectParagraph(self):
+    def selectParagraph(self, i):
         lines = open('story.txt').read().splitlines()
         #print(lines[10])
         self.myline = ""
         self.text = ""
-        while len(self.myline) <= 20:
-            self.myline = random.choice(lines)
-        while len(self.text) <= 20:
-            self.text = random.choice(lines)
+        for i in range(0, 2*i):
+            while len(self.myline) <= 20:
+                self.myline = random.choice(lines)
+            #while len(self.text) <= 20:
+               # self.text = random.choice(lines)
 
         prac_sess.st = self.myline + self.text + '.'
         prac_sess.st = prac_sess.st.replace('\xc2\xa0', ' ')
         #self.myline = re.sub('r^[xc|e.*]', ' '. self.myline)
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x9c', ' ')
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x9d', ' ')
+        prac_sess.st = prac_sess.st.replace('\xe2\x80\x99', ' ')
         word = prac_sess.st.split(" ")
-        print word
-        print self.myline + self.text + '.'
+        #print word
+        #print self.myline + self.text + '.'
         prac_sess.showPara.setText(prac_sess.st)
             #prac_sess.st = str(myline + text + ".")
         #print(myline + text + '.')
        #self.st = "You have shown paragraph here to type"
         #prac_sess.showPara.setText(prac_sess.st)
 
+    def selectNews(self):
+        print "Have to implement"
+        #lines = open('news.txt').read().splitlines()
+        #prac_sess.showPara.append(random.choice(lines))
+        #prac_sess.showPara.append(random.choice(lines))
+
+    def currentAffairs(self):
+        print "implment"
+        #Have to implement
+
+    def audioSection(self):
+        print "Implement"
+        #Have to implement
+
     def sessionPractice(self):
         #import Qtimer
     	self.obj.hide()
         #prac_sess = Practice_start.Ui_Form()
+        mapTime.timeMap.hide()
+        mapTime.min1.hide()
+        mapTime.min2.hide()
+        mapTime.min3.hide()
         prac_sess.setupUi(self.obj)
         self.obj.show()
-        prac_sess.start_Timer()
+        #prac_sess.start_Timer()
         timer.timeout.connect(self.startIn)
         timer.start(1000)
         #self.start_Timer()
