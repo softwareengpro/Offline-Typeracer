@@ -1,6 +1,7 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
 import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow
+from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
@@ -121,6 +122,7 @@ class Ui_O(object):
         #prac_sess.start_Timer()
         timer.timeout.connect(self.startIn)
         timer.start(1000)
+        prac_sess.editPara.textChanged.connect(self.text_changed)
         #self.start_Timer()
         #prac_sess.practice_session()
         #prac_sess.start_Timer()
@@ -143,6 +145,7 @@ class Ui_O(object):
             timer.q = 7
         else:
             prac_sess.editPara.setReadOnly(False)
+            self.begin_time = time()
 
     def selectParagraph(self):
         lines = open('story.txt').read().splitlines()
@@ -152,8 +155,8 @@ class Ui_O(object):
         #for i in range(0, 2*i):
         while len(self.myline) <= 20:
             self.myline = random.choice(lines)
-        while len(self.text) <= 20:
-            self.text = random.choice(lines)
+        #while len(self.text) <= 20:
+            #self.text = random.choice(lines)
 
         prac_sess.st = self.myline + self.text + '.'
         prac_sess.st = prac_sess.st.replace('\xc2\xa0', ' ')
@@ -218,12 +221,71 @@ class Ui_O(object):
     def hideUsernameWindow(self):
         username.hide()
 
+    def text_changed(self):
+        prac_sess.editPara.setReadOnly(True)
+        mytext = prac_sess.editPara.toPlainText()
+        l=len(mytext)
+        if l==1:
+            start_time = time()
+            print start_time
+        k=len(prac_sess.st)
+        print k
+        print l
+        if l <= k:
+            if mytext == prac_sess.st[0:l]:
+                print "match"
+                prac_sess.editPara.setStyleSheet("QTextEdit {color:black}")
+            else:
+                prac_sess.editPara.setStyleSheet("QTextEdit {color:red}")
+                wrongType.append(prac_sess.st[l-1])
+                print wrongType
+            if l <= k:
+                prac_sess.editPara.setReadOnly(False)
+        else:
+            self.final_time(k)
+            
+    def begin_time(self):
+        start_time = time()
+        print start_time
+        #return start_time
+
+    def final_time(self, k):
+        end_time = time()
+        #begin = self.begin_time()
+        print "hiii"
+        print start_time
+        total_time = (end_time - start_time)/60
+        print total_time
+        word_length = int(k/4)
+        self.wpm(total_time, word_length)
+
+    def wpm(self, t, l):
+        t = round(t, 2)
+        print t
+        print l
+        word_p_m = l/t
+        print round(word_p_m, 2)
+        self.accuracy()
+
+    def accuracy(self):
+        print "have to implement"
+        wrongType_l = len(wrongType)
+        k =len(prac_sess.st)
+        correct = float(k) - float(wrongType_l)
+        correctPercentage = (float(correct)/float(k)) * 100
+        print "Accuracy"
+        print round(correctPercentage, 2)
+
+
 if __name__ == "__main__":
     import sys
-
+    from time import time
     file = open("username.txt","rw+")
     userText = file.read()
+    wrongType = []
 
+    start_time = time()
+    print start_time
     app = QtGui.QApplication(sys.argv)
     O = QtGui.QWidget()
     ui = Ui_O()
