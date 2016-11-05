@@ -120,16 +120,6 @@ class Ui_Form(object):
 
 
     #function to start game in 5sec
-    def resultWindow(self):
-        layout = QHBoxLayout()
-        lineEdit = QLineEdit()
-        lineEdit.setText("Just to fill up the dialog")
-        layout.addWidget(lineEdit)         
-        self.widget = QWidget()
-        self.widget.setLayout(layout)  
-        self.setCentralWidget(self.widget)
-        self.setWindowTitle("Win2")
-        self.widget.show()
 
     def tick(self):
         print "self"

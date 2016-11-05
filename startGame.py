@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap, random, re
+import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 
@@ -46,7 +46,8 @@ class Ui_O(object):
         self.startgame.setText(_translate("O", "StarGame", None))
         self.close.setText(_translate("O", "Close", None))
         self.close.clicked.connect(self.closeApp)
-        self.startgame.clicked.connect(self.selectMode)
+        if userText != '': 
+            self.startgame.clicked.connect(self.selectMode)
 
     def closeApp(self):
         print "Cancel pressed"
@@ -96,6 +97,7 @@ class Ui_O(object):
         #mapTime = timeMap.Ui_Form()
         mapTime.setupUi(self.obj)
         mapTime.min1.clicked.connect(self.sessionPractice)
+        mapTime.min1.clicked.connect(self.resultWindow)
         print mapTime.min1.clicked
         mapTime.min2.clicked.connect(self.sessionPractice)
         mapTime.min3.clicked.connect(self.sessionPractice)
@@ -105,6 +107,27 @@ class Ui_O(object):
     def tick(self):
         print "self"
         print "tick"
+
+    def sessionPractice(self):
+        #import Qtimer
+        self.obj.hide()
+        #prac_sess = Practice_start.Ui_Form()
+        mapTime.timeMap.hide()
+        mapTime.min1.hide()
+        mapTime.min2.hide()
+        mapTime.min3.hide()
+        prac_sess.setupUi(self.obj)
+        self.obj.show()
+        #prac_sess.start_Timer()
+        timer.timeout.connect(self.startIn)
+        timer.start(1000)
+        #self.start_Timer()
+        #prac_sess.practice_session()
+        #prac_sess.start_Timer()
+        #print(timer.start(1000))
+        #prac_sess.tick()
+        #print "timer"
+        #prac_sess.startIn()
 
     def startIn(self):
         #ui = Ui_Form()
@@ -121,16 +144,16 @@ class Ui_O(object):
         else:
             prac_sess.editPara.setReadOnly(False)
 
-    def selectParagraph(self, i):
+    def selectParagraph(self):
         lines = open('story.txt').read().splitlines()
         #print(lines[10])
         self.myline = ""
         self.text = ""
-        for i in range(0, 2*i):
-            while len(self.myline) <= 20:
-                self.myline = random.choice(lines)
-            #while len(self.text) <= 20:
-               # self.text = random.choice(lines)
+        #for i in range(0, 2*i):
+        while len(self.myline) <= 20:
+            self.myline = random.choice(lines)
+        while len(self.text) <= 20:
+            self.text = random.choice(lines)
 
         prac_sess.st = self.myline + self.text + '.'
         prac_sess.st = prac_sess.st.replace('\xc2\xa0', ' ')
@@ -161,40 +184,66 @@ class Ui_O(object):
         print "Implement"
         #Have to implement
 
-    def sessionPractice(self):
-        #import Qtimer
-    	self.obj.hide()
-        #prac_sess = Practice_start.Ui_Form()
-        mapTime.timeMap.hide()
-        mapTime.min1.hide()
-        mapTime.min2.hide()
-        mapTime.min3.hide()
-        prac_sess.setupUi(self.obj)
-        self.obj.show()
-        #prac_sess.start_Timer()
-        timer.timeout.connect(self.startIn)
-        timer.start(1000)
-        #self.start_Timer()
-        #prac_sess.practice_session()
-        #prac_sess.start_Timer()
-        #print(timer.start(1000))
-        #prac_sess.tick()
-        #print "timer"
-        #prac_sess.startIn()
+    def resultWindow(self):
+        self.result = QtGui.QDialog()
+        resultWin.setupUi(self.result)
+        self.result.show()
+        #layout = QHBoxLayout()
+        """lineEdit = QLineEdit()
+                                lineEdit.setText("Just to fill up the dialog")
+                                layout.addWidget(lineEdit)         
+                                self.widget = QWidget()
+                                self.widget.setLayout(layout)  
+                                self.setCentralWidget(self.widget)
+                                self.setWindowTitle("Win2")
+                                self.widget.show()"""
 
+
+
+    def enterUsername(self):
+        #app1 = QtGui.QApplication(sys.argv)
+        usernameWin.setupUi(username)
+        usernameWin.ok.clicked.connect(self.getUsername)
+        usernameWin.cancel.clicked.connect(self.hideUsernameWindow)
+        username.show()
+        #app1.exec_()
+
+    def getUsername(self):
+        user = usernameWin.username.text()
+        file.write(user)
+        userText = file.read()
+        if userText != '':
+            username.hide()
+
+    def hideUsernameWindow(self):
+        username.hide()
 
 if __name__ == "__main__":
     import sys
-    #import selectSession
+
+    file = open("username.txt","rw+")
+    userText = file.read()
+
     app = QtGui.QApplication(sys.argv)
     O = QtGui.QWidget()
     ui = Ui_O()
     ui.setupUi(O)
     O.show()
+
+    #creating an object 
     wordObj = wordMap.Ui_Form() #create an global object of wordMap
     prac_sess = Practice_start.Ui_Form() #create an global object of practice_start session
     sessionMode = selectSession.Ui_Form() #create an global object of select session
     mapTime = timeMap.Ui_Form() #create an global object of timeMap
+    usernameWin = usernameWindow.Ui_Form() #create an global object of usernameWindow
+
+    #section for username
+    username = QtGui.QWidget()
+    resultWin = resultWindow.Ui_Dialog()
+    if userText == '':
+        ui.enterUsername()
+
+    #cretae a timer
     timer = QTimer()
     timer.q = 0
     app.exec_()
