@@ -30,7 +30,7 @@ class Ui_Form(object):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(800, 600)
         self.label = QtGui.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(170, 280, 50, 14))
+        self.label.setGeometry(QtCore.QRect(170, 310, 50, 14))
         self.label.setObjectName(_fromUtf8("label"))
         #self.q = 0
         #self.finish_para = 0
@@ -52,13 +52,13 @@ class Ui_Form(object):
 
         # Add show text paragraph
         self.showPara = QtGui.QTextEdit(Form)
-        self.showPara.setGeometry(QtCore.QRect(170, 130, 371, 121))
+        self.showPara.setGeometry(QtCore.QRect(170, 130, 581, 161))
         self.showPara.setObjectName(_fromUtf8("showPara"))
         self.showPara.setReadOnly(True)
 
         # Add Edit text box
         self.editPara = QtGui.QTextEdit(Form)
-        self.editPara.setGeometry(QtCore.QRect(170, 300, 371, 121))
+        self.editPara.setGeometry(QtCore.QRect(170, 325, 581, 161))
         self.editPara.setObjectName(_fromUtf8("editPara"))
         self.editPara.setReadOnly(True)
         #if self.finish_para == 0:
@@ -108,3 +108,90 @@ class Ui_Form(object):
         print "self"
         print "tick"
 
+
+"""    def text_changed(self):
+        self.editPara.setReadOnly(True)
+        mytext = self.editPara.toPlainText()
+        l=len(mytext)
+        if l==1:
+            st = self.begin_time()
+        k=len(self.st)
+        print k
+        print l
+        if l <= k:
+            if mytext == self.st[0:l]:
+                print "match"
+                self.editPara.setStyleSheet("QTextEdit {color:black}")
+            else:
+                self.editPara.setStyleSheet("QTextEdit {color:red}")
+            if l <= k:
+                self.editPara.setReadOnly(False)
+        else:
+            self.final_time(k)
+            
+    def begin_time(self):
+        start_time = time()
+        print start_time
+        return start_time
+
+    def final_time(self, k):
+        end_time = time()
+        #begin = self.begin_time()
+        total_time = (end_time - begin)/60
+        print total_time
+        word_length = int(k/4)
+        self.wpm(total_time, word_length)
+
+    def wpm(self, t, l):
+        t = round(t, 2)
+        print t
+        print l
+        word_p_m = l/t
+        print round(word_p_m, 2)"""
+
+"""    def startIn(self):
+        #ui = Ui_Form()
+        print "not call startIn"
+        #q = self.timer.q
+        if q < 6:
+            self.update_progressbar(q)
+            print self
+            print 'tick'
+            q += 1
+        else:
+            self.editPara.setReadOnly(False)
+            #return q
+
+    #function to start game within timer
+    def start_Timer(self):
+        #timer = QTimer()
+        #test = Ui_Form()
+        #print timer
+        #ui = Ui_Form()
+        #print self
+        global q
+        q =0
+        #self.startIn(q)
+        #timer.timeout.connect(self.startIn)
+        #timer.start(1000)
+        #print "timer"
+        #print timer.isActive()"""
+
+if __name__ == "__main__":
+    ui = Ui_Form()
+
+"""def practice_session(self):
+                import sys
+                from PyQt4.QtCore 
+                app = QtGui.QApplication(sys.argv)
+                Form = QtGui.QWidget()
+                ui = Ui_Form()
+    self.setupUi(Form)
+    Form.show()
+                #set timer
+    timer = QTimer()
+    timer.q = 0
+    timer.timeout.connect(self.startIn)
+    timer.start(1000)
+         
+                #sys.exit(app.exec_())"""

@@ -98,12 +98,26 @@ class Ui_O(object):
         #mapTime = timeMap.Ui_Form()
         mapTime.setupUi(self.obj)
         mapTime.min1.clicked.connect(self.sessionPractice)
-        mapTime.min1.clicked.connect(self.resultWindow)
-        print mapTime.min1.clicked
+        #mapTime.min1.clicked.connect(self.resultWindow)
+
+        mapTime.min2.clicked.connect(self.changeValue2)
         mapTime.min2.clicked.connect(self.sessionPractice)
+
+        mapTime.min3.clicked.connect(self.changeValue3)
         mapTime.min3.clicked.connect(self.sessionPractice)
         #Form.setEnabled(false)
         self.obj.show()
+
+    #it change the value of i to select the no pf line
+    def changeValue2(self):
+        global i
+        i = 4
+        print "changed"
+
+    def changeValue3(self):
+        global i
+        i = 6
+        print "changed"
 
     def tick(self):
         print "self"
@@ -148,30 +162,30 @@ class Ui_O(object):
             self.begin_time = time()
 
     def selectParagraph(self):
+        import time
         lines = open('story.txt').read().splitlines()
         #print(lines[10])
         self.myline = ""
-        self.text = ""
-        #for i in range(0, 2*i):
-        while len(self.myline) <= 20:
-            self.myline = random.choice(lines)
-        #while len(self.text) <= 20:
-            #self.text = random.choice(lines)
-
-        prac_sess.st = self.myline + self.text + '.'
+        prac_sess.st = ""
+        print "hhiiii "
+        print i
+        for j in range(0, 2*i):
+            #print "asdf"
+            while len(self.myline) <= 20:
+                self.myline = random.choice(lines)
+                #print self.myline
+            prac_sess.st = self.myline + prac_sess.st
+            self.myline = ""
         prac_sess.st = prac_sess.st.replace('\xc2\xa0', ' ')
-        #self.myline = re.sub('r^[xc|e.*]', ' '. self.myline)
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x9c', ' ')
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x9d', ' ')
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x99', ' ')
-        word = prac_sess.st.split(" ")
-        #print word
-        #print self.myline + self.text + '.'
+        prac_sess.st = prac_sess.st.replace('\xc2', ' ')
         prac_sess.showPara.setText(prac_sess.st)
-            #prac_sess.st = str(myline + text + ".")
-        #print(myline + text + '.')
-       #self.st = "You have shown paragraph here to type"
-        #prac_sess.showPara.setText(prac_sess.st)
+        self.resultSection()
+
+    def resultSection(self):
+        self.resultWindow()
 
     def selectNews(self):
         print "Have to implement"
@@ -190,18 +204,11 @@ class Ui_O(object):
     def resultWindow(self):
         self.result = QtGui.QDialog()
         resultWin.setupUi(self.result)
+        #hBoxLayout = QHBoxLayout()
         self.result.show()
-        #layout = QHBoxLayout()
-        """lineEdit = QLineEdit()
-                                lineEdit.setText("Just to fill up the dialog")
-                                layout.addWidget(lineEdit)         
-                                self.widget = QWidget()
-                                self.widget.setLayout(layout)  
-                                self.setCentralWidget(self.widget)
-                                self.setWindowTitle("Win2")
-                                self.widget.show()"""
-
-
+        resultWin.typeTime.setText("Total")
+        resultWin.userWPM.setText("W")
+        resultWin.userAccuracy.setText("A")
 
     def enterUsername(self):
         #app1 = QtGui.QApplication(sys.argv)
@@ -283,6 +290,7 @@ if __name__ == "__main__":
     file = open("username.txt","rw+")
     userText = file.read()
     wrongType = []
+    i = 2
 
     start_time = time()
     print start_time
