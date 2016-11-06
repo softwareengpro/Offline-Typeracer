@@ -2,6 +2,16 @@
 
 import socket 
 import sys
+import os
+import threading
+import time
+from queue import Queue
+
+num_of_thread=4
+threadlst=[1,2,3,4]
+queue=Queue()
+connection_obj=[]
+connection_addr=[]
 
 def create_socket():
     try:
