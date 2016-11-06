@@ -33,6 +33,7 @@ def accept_socket():
 
 def send_msg(c):
     while(True):
+        print " send a msg to client"
         m=raw_input()
     if(m=='quit'):
         c.close()
