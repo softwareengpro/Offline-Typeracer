@@ -35,6 +35,23 @@ def bind_socket():
         print str(tag)
         bind_socket()
 
+def accept_connection():
+    for i in connection_obj:
+        i.close()
+    del connection_obj[:]
+    del connection_addr[:]
+    while 1:
+        try:
+            c,addr=s.accept()
+            c.setblocking(1)
+            connection_obj.append(c)
+            connection_obj.append(addr)
+        except:
+            print "error accepting connection"
+            
+
+
+
 
         
 def main():
