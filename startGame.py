@@ -54,6 +54,18 @@ class Ui_O(object):
             self.startgame.clicked.connect(self.firstNameDialog)
 
     def update_currentAffairs(self):
+        currentAffairs = open("currentAffairs.txt", "r+")
+        d = feedparser.parse('http://www.jagranjosh.com/rss/josh/current_affairs.xml')
+        for i in range(0, 20):
+            currentAffairs.write(str(d['entries'][i]['title'].encode('ascii', 'ignore') + '\n'))
+        currentAffairs.close()
+
+    def update_news(self):
+        news = open("news.txt", "r+")
+        c = feedparser.parse('http://timesofindia.indiatimes.com/rssfeedstopstories.cms')
+        for i in range(0, 5):
+            news.write(str(c['entries'][i]['title'].encode('ascii', 'ignore') + '\n'))
+        news.close()
 
 
     def closeApp(self):
@@ -89,7 +101,9 @@ class Ui_O(object):
         wordObj.setupUi(self.obj)
         self.obj.show()
         wordObj.paragraph.clicked.connect(self.selectTimeMap)
+        wordObj.news.clicked.connect(self.sessionPracticeGK)
         wordObj.news.clicked.connect(self.selectNews)
+        wordObj.gk.clicked.connect(self.sessionPracticeGK)
         wordObj.gk.clicked.connect(self.currentAffairs)
         wordObj.audio.clicked.connect(self.audioSection)
 
@@ -104,6 +118,7 @@ class Ui_O(object):
         #mapTime = timeMap.Ui_Form()
         mapTime.setupUi(self.obj)
         mapTime.min1.clicked.connect(self.sessionPractice)
+        mapTime.min1.clicked.connect(self.selectParagraph)
         #mapTime.min1.clicked.connect(self.resultWindow)
 
         mapTime.min2.clicked.connect(self.changeValue2)
@@ -154,6 +169,19 @@ class Ui_O(object):
         #print "timer"
         #prac_sess.startIn()
 
+    def sessionPracticeGK(self):
+        self.obj.hide()
+        prac_sess.setupUi(self.obj)
+        self.obj.show()
+        #prac_sess.start_Timer()
+        timer.timeout.connect(self.startIn)
+        timer.start(1000)
+        prac_sess.editPara.textChanged.connect(self.text_changed)
+        prac_sess.finish.clicked.connect(self.firstActivity)
+        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.final_time)
+
+
     def startIn(self):
         #ui = Ui_Form()
         #print "not call startIn"
@@ -164,7 +192,7 @@ class Ui_O(object):
             print 'tick'
             timer.q += 1
         elif timer.q == 6:
-            self.selectParagraph()
+            #self.selectParagraph()
             timer.q = 7
         else:
             prac_sess.editPara.setReadOnly(False)
@@ -198,12 +226,23 @@ class Ui_O(object):
 
     def selectNews(self):
         print "Have to implement"
+        lines = open('news.txt').read().splitlines()
+        prac_sess.st = ""
+        for j in lines:
+            prac_sess.st = prac_sess.st + j + '\n'
+        prac_sess.showPara.setText(prac_sess.st)
         #lines = open('news.txt').read().splitlines()
         #prac_sess.showPara.append(random.choice(lines))
         #prac_sess.showPara.append(random.choice(lines))
 
     def currentAffairs(self):
         print "implment"
+        lines = open('currentAffairs.txt').read().splitlines()
+        prac_sess.st = ""
+        for j in range (0, 9):
+            text = random.choice(lines)
+            prac_sess.st = prac_sess.st + '\n' + text
+        prac_sess.showPara.setText(prac_sess.st)
         #Have to implement
 
     def audioSection(self):
@@ -325,6 +364,19 @@ class Ui_O(object):
         resultWin.userAccuracy.setText(str(Accurate))
 
 
+"""    def startInFive(self):
+        d = QtGui.QDialog()
+        b1 = QtGui.QTextEdit("Start In",d)
+        b2 = QtGui.QProgressBar(d)
+        b1.move(10,50)
+        b1.setReadOnly(True)
+        b1.setGeometry(QtCore.QRect(70, 10, 104, 31))
+        b2.setGeometry(QtCore.QRect(70, 60, 104, 31))
+        d.setWindowTitle("Dialog")
+        #d.setWindowModality(Qt.ApplicationModal)
+        d.exec_()"""
+
+
 if __name__ == "__main__":
     import sys
     from time import time
@@ -342,6 +394,9 @@ if __name__ == "__main__":
     ui = Ui_O()
     ui.setupUi(O)
     O.show()
+
+    ui.update_currentAffairs()
+    ui.update_news()
 
     #creating an object 
     wordObj = wordMap.Ui_Form() #create an global object of wordMap
