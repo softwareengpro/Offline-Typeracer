@@ -4,6 +4,7 @@ import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWind
 from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
+import feedparser
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -49,6 +50,11 @@ class Ui_O(object):
         self.close.clicked.connect(self.closeApp)
         if userText != '': 
             self.startgame.clicked.connect(self.selectMode)
+        else:
+            self.startgame.clicked.connect(self.firstNameDialog)
+
+    def update_currentAffairs(self):
+
 
     def closeApp(self):
         print "Cancel pressed"
@@ -137,6 +143,9 @@ class Ui_O(object):
         timer.timeout.connect(self.startIn)
         timer.start(1000)
         prac_sess.editPara.textChanged.connect(self.text_changed)
+        prac_sess.finish.clicked.connect(self.firstActivity)
+        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.final_time)
         #self.start_Timer()
         #prac_sess.practice_session()
         #prac_sess.start_Timer()
@@ -182,7 +191,7 @@ class Ui_O(object):
         prac_sess.st = prac_sess.st.replace('\xe2\x80\x99', ' ')
         prac_sess.st = prac_sess.st.replace('\xc2', ' ')
         prac_sess.showPara.setText(prac_sess.st)
-        self.resultSection()
+        #self.resultSection()
 
     def resultSection(self):
         self.resultWindow()
@@ -228,60 +237,92 @@ class Ui_O(object):
     def hideUsernameWindow(self):
         username.hide()
 
+    def firstNameDialog(self):
+        d = QtGui.QDialog()
+        b1 = QtGui.QPushButton("First enter your Name",d)
+        b1.move(50,50)
+        d.setWindowTitle("Dialog")
+        #d.setWindowModality(Qt.ApplicationModal)
+        d.exec_()
+
     def text_changed(self):
         prac_sess.editPara.setReadOnly(True)
         mytext = prac_sess.editPara.toPlainText()
-        l=len(mytext)
-        if l==1:
+        global input_l
+        input_l=len(mytext)
+        print input_l
+        if input_l == 1:
             start_time = time()
             print start_time
-        k=len(prac_sess.st)
-        print k
-        print l
-        if l <= k:
-            if mytext == prac_sess.st[0:l]:
+        para_l = len(prac_sess.st)
+        print input_l
+        print para_l
+        if input_l <= para_l:
+            if mytext == prac_sess.st[0:input_l]:
                 print "match"
                 prac_sess.editPara.setStyleSheet("QTextEdit {color:black}")
-            else:
+            else: 
                 prac_sess.editPara.setStyleSheet("QTextEdit {color:red}")
-                wrongType.append(prac_sess.st[l-1])
+                wrongType.append(prac_sess.st[input_l-1])
                 print wrongType
-            if l <= k:
+            if input_l <= para_l:
                 prac_sess.editPara.setReadOnly(False)
         else:
-            self.final_time(k)
-            
+            self.final_time()
+            self.resultSection()
+
+    #initial activity
+    def firstActivity(self):
+        prac_sess.progressBar.hide()
+        prac_sess.timeToStart.hide()
+        prac_sess.showPara.hide()
+        prac_sess.editPara.hide()
+        prac_sess.finish.hide()
+        prac_sess.label.hide()
+        prac_sess.label_2.hide()
+        self.setupUi(self.obj)
+        self.startgame.show()
+        self.close.show()
+        self.obj.show()
+
     def begin_time(self):
         start_time = time()
         print start_time
         #return start_time
 
-    def final_time(self, k):
+    def final_time(self):
         end_time = time()
         #begin = self.begin_time()
         print "hiii"
         print start_time
         total_time = (end_time - start_time)/60
         print total_time
-        word_length = int(k/4)
+        resultWin.typeTime.setText(str(total_time))
+        print input_l
+        word_length = float(input_l/4)
         self.wpm(total_time, word_length)
 
     def wpm(self, t, l):
         t = round(t, 2)
         print t
         print l
-        word_p_m = l/t
-        print round(word_p_m, 2)
+        word_p_m = float(l)/t
+        #print word_p_m
+        wpm = round(word_p_m, 2)
+        print wpm
+        resultWin.userWPM.setText(str(wpm))
         self.accuracy()
 
     def accuracy(self):
         print "have to implement"
         wrongType_l = len(wrongType)
         k =len(prac_sess.st)
+        #word_left = k - input_l
         correct = float(k) - float(wrongType_l)
         correctPercentage = (float(correct)/float(k)) * 100
         print "Accuracy"
-        print round(correctPercentage, 2)
+        Accurate = round(correctPercentage, 2)
+        resultWin.userAccuracy.setText(str(Accurate))
 
 
 if __name__ == "__main__":
@@ -291,6 +332,8 @@ if __name__ == "__main__":
     userText = file.read()
     wrongType = []
     i = 2
+    input_l = 0
+    para_l = 0
 
     start_time = time()
     print start_time

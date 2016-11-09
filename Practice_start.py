@@ -73,12 +73,6 @@ class Ui_Form(object):
         self.finish.setGeometry(QtCore.QRect(490, 510, 51, 27))
         self.finish.setObjectName(_fromUtf8("finish"))
 
-        # Add cancel button
-        self.Cancel = QtGui.QPushButton(Form)
-        self.Cancel.setGeometry(QtCore.QRect(570, 510, 51, 27))
-        self.Cancel.setObjectName(_fromUtf8("Cancel"))
-        self.Cancel.clicked.connect(self.closeApp)
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -87,7 +81,7 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "Type Here", None))
         self.label_2.setText(_translate("Form", "Your Paragraph", None))
         self.finish.setText(_translate("Form", "Finish", None))
-        self.Cancel.setText(_translate("Form", "Cancel", None))
+        #self.Cancel.setText(_translate("Form", "Cancel", None))
 
     #function to update progress bar
     def update_progressbar(self, val):
