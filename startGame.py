@@ -123,9 +123,11 @@ class Ui_O(object):
 
         mapTime.min2.clicked.connect(self.changeValue2)
         mapTime.min2.clicked.connect(self.sessionPractice)
+        mapTime.min2.clicked.connect(self.selectParagraph)
 
         mapTime.min3.clicked.connect(self.changeValue3)
         mapTime.min3.clicked.connect(self.sessionPractice)
+        mapTime.min3.clicked.connect(self.selectParagraph)
         #Form.setEnabled(false)
         self.obj.show()
 
