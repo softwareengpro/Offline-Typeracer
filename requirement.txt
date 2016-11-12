@@ -1,0 +1,5 @@
+sudo apt-get install python-qt4.
+pip install feedparser
+pip install requests
+pip install pyttsx
+sudo apt-get install pyside-tools

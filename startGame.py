@@ -5,6 +5,9 @@ from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
 import feedparser
+import urllib2
+import audio_edit
+from PySide.phonon import Phonon
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -36,7 +39,6 @@ class Ui_O(object):
         self.close = QtGui.QPushButton(self.centralwidget)
         self.close.setGeometry(QtCore.QRect(330, 270, 85, 27))
         self.close.setObjectName(_fromUtf8("close"))
-        
 
         self.retranslateUi(O)
         QtCore.QMetaObject.connectSlotsByName(O)
@@ -101,11 +103,32 @@ class Ui_O(object):
         wordObj.setupUi(self.obj)
         self.obj.show()
         wordObj.paragraph.clicked.connect(self.selectTimeMap)
-        wordObj.news.clicked.connect(self.sessionPracticeGK)
-        wordObj.news.clicked.connect(self.selectNews)
+        wordObj.news.clicked.connect(self.internet_on)
         wordObj.gk.clicked.connect(self.sessionPracticeGK)
         wordObj.gk.clicked.connect(self.currentAffairs)
         wordObj.audio.clicked.connect(self.audioSection)
+
+    def internet_on(self):
+        for timeout in [1,5,10,15]:
+            try:
+                response=urllib2.urlopen('http://google.com',timeout=timeout)
+                print "you are connect with internet"
+                self.update_currentAffairs()
+                self.sessionPracticeGK()
+                self.selectNews()
+                return True
+            except urllib2.URLError as err:
+                print "you are not connected"
+                self.noInternet()
+        return False
+
+    def noInternet(self):
+        In = QtGui.QDialog()
+        I1 = QtGui.QPushButton("No internet connection",In)
+        I1.move(50,50)
+        In.setWindowTitle("Dialog")
+        #d.setWindowModality(Qt.ApplicationModal)
+        In.exec_()
 
     def selectTimeMap(self):
         self.obj.hide()
@@ -247,9 +270,100 @@ class Ui_O(object):
         prac_sess.showPara.setText(prac_sess.st)
         #Have to implement
 
+#Audio Section
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     def audioSection(self):
         print "Implement"
+        self.obj.hide()
+        wordObj.Chose_topic.hide()
+        wordObj.paragraph.hide()
+        wordObj.news.hide()
+        wordObj.gk.hide()
+        wordObj.audio.hide()
+        audioObj.setupUi(self.obj)
+        audioObj.close.clicked.connect(self.closeApp)
+        audioObj.play.clicked.connect(self.playAudio)
+        audioObj.audioTextEdit.textChanged.connect(self.audioEdit)
+        audioObj.finish.clicked.connect(self.resultWindow)
+        audioObj.finish.clicked.connect(self.audioResult)
+        self.obj.show()
         #Have to implement
+
+    def playAudio(self):
+        print 'Audio playing'
+        audioObj.audioTextEdit.setReadOnly(False)
+        global start_time
+        start_time = time()
+        import pyttsx
+        engine = pyttsx.init()
+        rate = engine.getProperty('rate')
+        engine.setProperty('rate', 10)
+        global audioStr
+        audioStr = 'Sally sells seashells by the seashore.'
+        engine.say(audioStr)
+        print "hllo"
+        engine.runAndWait()
+
+    def audioEdit(self):
+        audioObj.audioTextEdit.setReadOnly(True)
+        global audioEditStr
+        audioEditStr = audioObj.audioTextEdit.toPlainText()
+        print audioEditStr
+        audioObj.audioTextEdit.setReadOnly(False)
+
+    def audioResult(self):
+        tm, line = self.counter()
+        tm = round(tm, 2)
+        words_per_minute = self.Wpm(tm, line)
+        words_per_minute = round(words_per_minute, 2)
+        #percentage = self.wordcheck(line)
+        #percentager = round(percentage, 2)
+
+    def counter(self):
+        i = 0 
+        end_time = time()
+        print end_time
+        final_time = (end_time - start_time) / 60
+        print final_time
+        resultWin.typeTime.setText(str(final_time))
+        return final_time, audioStr
+
+
+    def Wpm(self, time, line):
+        words = line.split()
+        word_length = len(words)
+        words_per_m = word_length / time
+        print words_per_m
+        resultWin.userWPM.setText(str(words_per_m))
+        return words_per_m
+
+
+    # def wordcheck(self, audioEditStr):
+    #     audio = audioStr.split()
+    #     audioEdit = audioEditStr.split()
+    #     errorcount = 0
+        
+    #     idx = 0
+    #     for inp in audioEdit:
+    #         if inp != audio[idx]:
+    #             errorcount += 1
+    #             if inp == audio[idx + 1]:
+    #                 idx += 2
+    #             elif inp != audio[idx - 1]:
+    #                 idx += 1
+    #         else:
+    #             idx += 1
+        
+    #     words_left = len(audio) - len(audioEdit)
+    #     correct = float(len(audio)) - float(errorcount)
+    #     percentage = (((float(correct) / float(len(audioStr))) - float(words_left) / float(len(audioStr))) * 100)
+
+        
+    #     return percentage
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 
     def resultWindow(self):
         self.result = QtGui.QDialog()
@@ -388,6 +502,8 @@ if __name__ == "__main__":
     i = 2
     input_l = 0
     para_l = 0
+    audioStr = ''
+    audioEditStr = ''
 
     start_time = time()
     print start_time
@@ -397,8 +513,8 @@ if __name__ == "__main__":
     ui.setupUi(O)
     O.show()
 
-    ui.update_currentAffairs()
-    ui.update_news()
+    #ui.update_currentAffairs()
+    #ui.update_news()
 
     #creating an object 
     wordObj = wordMap.Ui_Form() #create an global object of wordMap
@@ -406,7 +522,8 @@ if __name__ == "__main__":
     sessionMode = selectSession.Ui_Form() #create an global object of select session
     mapTime = timeMap.Ui_Form() #create an global object of timeMap
     usernameWin = usernameWindow.Ui_Form() #create an global object of usernameWindow
-
+    audioObj = audio_edit.Ui_Audio()
+    #media_obj = Phonon.MediaObject(O)
     #section for username
     username = QtGui.QWidget()
     resultWin = resultWindow.Ui_Dialog()
