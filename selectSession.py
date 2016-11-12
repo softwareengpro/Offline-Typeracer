@@ -18,54 +18,59 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(700, 500)
+        Form.resize(800, 600)
+        font = QtGui.QFont()
+        font.setKerning(False)
+        Form.setFont(font)
+        Form.setStyleSheet(_fromUtf8("background-color: rgb(85, 170, 127);"))
         self.practice_session = QtGui.QPushButton(Form)
-        self.practice_session.setGeometry(QtCore.QRect(180, 220, 85, 27))
+        self.practice_session.setGeometry(QtCore.QRect(180, 270, 131, 41))
+        self.practice_session.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.practice_session.setObjectName(_fromUtf8("practice_session"))
-
-
         self.create_challenge = QtGui.QPushButton(Form)
-        self.create_challenge.setGeometry(QtCore.QRect(440, 220, 101, 27))
+        self.create_challenge.setGeometry(QtCore.QRect(540, 270, 141, 41))
+        self.create_challenge.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);\n"
+""))
         self.create_challenge.setObjectName(_fromUtf8("create_challenge"))
-
         self.acceptchallenge = QtGui.QPushButton(Form)
-        self.acceptchallenge.setGeometry(QtCore.QRect(310, 310, 101, 27))
+        self.acceptchallenge.setGeometry(QtCore.QRect(360, 370, 151, 41))
+        self.acceptchallenge.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);\n"
+""))
         self.acceptchallenge.setObjectName(_fromUtf8("acceptchallenge"))
-
         self.back = QtGui.QPushButton(Form)
-        self.back.setGeometry(QtCore.QRect(60, 510, 51, 27))
+        self.back.setGeometry(QtCore.QRect(30, 530, 51, 27))
+        self.back.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.back.setObjectName(_fromUtf8("back"))
-
         self.close = QtGui.QPushButton(Form)
-        self.close.setGeometry(QtCore.QRect(660, 510, 51, 27))
+        self.close.setGeometry(QtCore.QRect(720, 530, 51, 27))
+        self.close.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.close.setObjectName(_fromUtf8("close"))
-        self.close.clicked.connect(self.closeApp)
-
-
         self.label = QtGui.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(270, 110, 161, 21))
+        self.label.setGeometry(QtCore.QRect(300, 170, 251, 41))
         font = QtGui.QFont()
         font.setPointSize(16)
         font.setBold(True)
         font.setItalic(True)
-        font.setUnderline(True)
+        font.setUnderline(False)
         font.setWeight(75)
         font.setStrikeOut(False)
         self.label.setFont(font)
+        self.label.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);\n"
+""))
         self.label.setObjectName(_fromUtf8("label"))
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-        self.obj = Form
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(_translate("Form", "Select Mode", None))
+        Form.setWindowTitle(_translate("Form", "Form", None))
         self.practice_session.setText(_translate("Form", "Practice", None))
         self.create_challenge.setText(_translate("Form", "Create Challenge", None))
         self.acceptchallenge.setText(_translate("Form", "Accept Challenge", None))
         self.back.setText(_translate("Form", "Back", None))
         self.close.setText(_translate("Form", "close", None))
-        self.label.setText(_translate("Form", "Choose Your Session", None))
+        self.label.setText(_translate("Form", "     Choose Your Session", None))
+
 
     def closeApp(self):
         print "Cancel pressed"

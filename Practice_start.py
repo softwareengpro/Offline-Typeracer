@@ -31,14 +31,17 @@ class Ui_Form(object):
         Form.resize(800, 600)
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(170, 310, 50, 14))
+        self.label.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.label.setObjectName(_fromUtf8("label"))
         #self.q = 0
         #self.finish_para = 0
 
         #Add progress bar
         self.progressBar = QtGui.QProgressBar(Form)
-        self.progressBar.setGeometry(QtCore.QRect(230, 40, 118, 23))
+        self.progressBar.setGeometry(QtCore.QRect(680, 0, 121, 23))
         self.progressBar.setMinimumSize(QtCore.QSize(118, 23))
+        self.progressBar.setStyleSheet(_fromUtf8("color: rgb(0, 0, 50);"))
+        self.progressBar.setObjectName(_fromUtf8("progressBar"))
         self.progressBar.setProperty("value", 0)
         self.progressBar.setMinimum(0)
         self.progressBar.setMaximum(5)
@@ -66,11 +69,13 @@ class Ui_Form(object):
 
         self.label_2 = QtGui.QLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(170, 110, 81, 16))
+        self.label_2.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.label_2.setObjectName(_fromUtf8("label_2"))
 
         # add Ok button
         self.finish = QtGui.QPushButton(Form)
-        self.finish.setGeometry(QtCore.QRect(490, 510, 51, 27))
+        self.finish.setGeometry(QtCore.QRect(670, 530, 51, 27))
+        self.finish.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.finish.setObjectName(_fromUtf8("finish"))
 
         self.retranslateUi(Form)
