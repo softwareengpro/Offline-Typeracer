@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow
+import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow, createChallenge, challengeWordMap, challengeTimeMap
 from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
@@ -122,8 +122,8 @@ class Ui_O(object):
 
     def update_news(self):
         news = open("news.txt", "r+")
-        c = feedparser.parse('http://timesofindia.indiatimes.com/rssfeedstopstories.cms')
-        for i in range(0, 5):
+        c = feedparser.parse('http://www.thehindu.com/news/?service=rss')
+        for i in range(0, 100):
             news.write(str(c['entries'][i]['title'].encode('ascii', 'ignore') + '\n'))
         news.close()
 
@@ -154,7 +154,73 @@ class Ui_O(object):
         sessionMode.close.clicked.connect(self.closeApp) 
         sessionMode.practice_session.clicked.connect(self.selectTopic)  
         sessionMode.acceptchallenge.clicked.connect(self.joinChallenge)
+        sessionMode.create_challenge.clicked.connect(self.challengeWordmap)
         sessionMode.back.clicked.connect(self.back2_1)
+
+#For Challenge
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    def challengeWordmap(self):
+        self.obj.hide()
+        #wordObj = wordMap.Ui_Form()
+        sessionMode.practice_session.hide()
+        sessionMode.create_challenge.hide()
+        sessionMode.acceptchallenge.hide()
+        sessionMode.label.hide()
+        sessionMode.back.hide()
+        wordMapChallenge.setupUi(self.obj)
+        self.obj.show()
+        wordMapChallenge.Paragraph.clicked.connect(self.timeMapChallenge)
+        wordMapChallenge.News.clicked.connect(self.internet_on)
+        wordMapChallenge.Gk.clicked.connect(self.challengeCreate)
+        wordMapChallenge.Back.clicked.connect(self.backword_session)
+
+    def challengeCreate(self):
+        self.obj.hide()
+        challengeCreate.setupUi(self.obj)   
+        self.obj.show()
+        wordMapChallenge.chose_topic.hide()
+        wordMapChallenge.Paragraph.hide()
+        wordMapChallenge.News.hide()
+        wordMapChallenge.Gk.hide()
+        timeChallenge.Back.hide()
+        timeChallenge.Min1.hide()
+        timeChallenge.Min2.hide()
+        timeChallenge.Min3.hide()
+        timeChallenge.TimeMap.hide()
+        #timeMap.back.hide()
+        wordMapChallenge.Back.hide()
+        challengeCreate.back.clicked.connect(self.backChallenge_Time)
+
+    def backChallenge_Time(self):
+        self.obj.hide()
+        challengeCreate.createLabel.hide()
+        challengeCreate.createChallenge.hide()
+        challengeCreate.back.hide()
+        mapTime.setupUi(self.obj)
+        self.obj.show()
+        wordMapChallenge.Paragraph.clicked.connect(self.timeMapChallenge)
+        wordMapChallenge.News.clicked.connect(self.challengeCreate)
+        wordMapChallenge.Gk.clicked.connect(self.challengeCreate)
+        wordMapChallenge.Back.clicked.connect(self.backword_session)
+
+
+    def timeMapChallenge(self):
+        self.obj.hide()
+        wordMapChallenge.chose_topic.hide()
+        wordMapChallenge.Paragraph.hide()
+        wordMapChallenge.News.hide()
+        wordMapChallenge.Gk.hide()
+        sessionMode.back.hide()
+        wordMapChallenge.Back.hide()
+        timeChallenge.setupUi(self.obj)
+        timeChallenge.Min1.clicked.connect(self.challengeCreate)
+        timeChallenge.Min2.clicked.connect(self.challengeCreate)
+        timeChallenge.Min3.clicked.connect(self.challengeCreate)
+        self.obj.show()
+
+#For going back 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>        
 
     def back2_1(self):
         self.obj.hide()
@@ -162,6 +228,37 @@ class Ui_O(object):
         sessionMode.back.hide()
         sessionMode.close.hide()
         self.obj.show()
+
+    def backword_session(self):
+        self.obj.hide()
+        wordObj.Chose_topic.hide()
+        wordObj.paragraph.hide()
+        wordObj.news.hide()
+        wordObj.gk.hide()
+        wordObj.audio.hide()
+        wordObj.back.hide()
+        sessionMode.back.hide()
+        sessionMode.setupUi(self.obj)
+        self.obj.show()
+        sessionMode.close.clicked.connect(self.closeApp) 
+        sessionMode.practice_session.clicked.connect(self.selectTopic)  
+        sessionMode.acceptchallenge.clicked.connect(self.joinChallenge)
+
+    def backTime_word(self):
+        self.obj.hide()
+        wordObj.setupUi(self.obj)
+        mapTime.min1.hide()
+        mapTime.min2.hide()
+        mapTime.min3.hide()
+        self.obj.show()
+        wordObj.paragraph.clicked.connect(self.selectTimeMap)
+        wordObj.news.clicked.connect(self.internet_on)
+        wordObj.gk.clicked.connect(self.sessionPracticeGK)
+        wordObj.gk.clicked.connect(self.currentAffairs)
+        wordObj.audio.clicked.connect(self.audioSection)
+        wordObj.back.clicked.connect(self.backword_session)
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     def joinChallenge(self):
         sessionMode.practice_session.hide()
@@ -186,20 +283,6 @@ class Ui_O(object):
         wordObj.audio.clicked.connect(self.audioSection)
         wordObj.back.clicked.connect(self.backword_session)
 
-    def backword_session(self):
-        self.obj.hide()
-        wordObj.Chose_topic.hide()
-        wordObj.paragraph.hide()
-        wordObj.news.hide()
-        wordObj.gk.hide()
-        wordObj.audio.hide()
-        wordObj.back.hide()
-        sessionMode.back.hide()
-        sessionMode.setupUi(self.obj)
-        self.obj.show()
-        sessionMode.close.clicked.connect(self.closeApp) 
-        sessionMode.practice_session.clicked.connect(self.selectTopic)  
-        sessionMode.acceptchallenge.clicked.connect(self.joinChallenge)
 
     def internet_on(self):
         for timeout in [1,5,10,15]:
@@ -212,7 +295,9 @@ class Ui_O(object):
                 return True
             except urllib2.URLError as err:
                 print "you are not connected"
-                self.noInternet()
+                self.sessionPracticeGK()
+                self.selectNews()
+                #self.noInternet()
         return False
 
     def noInternet(self):
@@ -249,20 +334,6 @@ class Ui_O(object):
         mapTime.back.clicked.connect(self.backTime_word)
         #Form.setEnabled(false)
         self.obj.show()
-
-    def backTime_word(self):
-        self.obj.hide()
-        wordObj.setupUi(self.obj)
-        mapTime.min1.hide()
-        mapTime.min2.hide()
-        mapTime.min3.hide()
-        self.obj.show()
-        wordObj.paragraph.clicked.connect(self.selectTimeMap)
-        wordObj.news.clicked.connect(self.internet_on)
-        wordObj.gk.clicked.connect(self.sessionPracticeGK)
-        wordObj.gk.clicked.connect(self.currentAffairs)
-        wordObj.audio.clicked.connect(self.audioSection)
-        wordObj.back.clicked.connect(self.backword_session)
 
     #it change the value of i to select the no pf line
     def changeValue2(self):
@@ -310,6 +381,7 @@ class Ui_O(object):
         self.obj.hide()
         prac_sess.setupUi(self.obj)
         self.obj.show()
+        wordObj.gk.hide()
         #prac_sess.start_Timer()
         timer.timeout.connect(self.startIn)
         timer.start(1000)
@@ -363,6 +435,7 @@ class Ui_O(object):
 
     def selectNews(self):
         print "Have to implement"
+        self.update_news()
         lines = open('news.txt').read().splitlines()
         prac_sess.st = ""
         for j in lines:
@@ -635,6 +708,9 @@ if __name__ == "__main__":
     mapTime = timeMap.Ui_Form() #create an global object of timeMap
     usernameWin = usernameWindow.Ui_Form() #create an global object of usernameWindow
     audioObj = audio_edit.Ui_Audio()
+    challengeCreate = createChallenge.Ui_Form()
+    wordMapChallenge = challengeWordMap.Ui_Form()
+    timeChallenge = challengeTimeMap.Ui_Form()
     #media_obj = Phonon.MediaObject(O)
     #section for username
     username = QtGui.QWidget()

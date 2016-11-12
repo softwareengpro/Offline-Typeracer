@@ -12,3 +12,6 @@ username.txt~
 currentAffairs.txt~
 news.txt~
 audio_edit.pyc
+createChallenge.pyc
+challengeTimeMap.pyc
+challengeWordMap.pyc
