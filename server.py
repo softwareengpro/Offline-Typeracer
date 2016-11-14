@@ -5,11 +5,8 @@ import sys
 import os
 import threading
 import time
-from queue import Queue
-
-num_of_thread=4
-threadlst=[1,2,3,4]
-queue=Queue()
+num_of_thread=2
+threadlst=[1,2]
 connection_obj=[]
 connection_addr=[]
 
@@ -29,7 +26,7 @@ def bind_socket():
         global host
         global port
         global s
-        s.bind((host,port))
+        s.bind(('',port))
         s.listen(5)
     except socket.error as tag:
         print str(tag)
