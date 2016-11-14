@@ -29,10 +29,10 @@ class Ui_Dialog(object):
         Dialog.resize(800, 600)
         Dialog.setStyleSheet(_fromUtf8("\n"
 "background-color: rgb(85, 170, 127);"))
-        self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(370, 346, 98, 41))
-        self.pushButton.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
-        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.joinchallenge = QtGui.QPushButton(Dialog)
+        self.joinchallenge.setGeometry(QtCore.QRect(370, 346, 98, 41))
+        self.joinchallenge.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
+        self.joinchallenge.setObjectName(_fromUtf8("pushButton"))
         self.textEdit = QtGui.QTextEdit(Dialog)
         self.textEdit.setGeometry(QtCore.QRect(303, 160, 311, 51))
         self.textEdit.setStyleSheet(_fromUtf8("background-color: rgb(255, 255, 255);"))
@@ -47,16 +47,16 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
-        self.pushButton.setText(_translate("Dialog", "Join", None))
+        self.joinchallenge.setText(_translate("Dialog", "Join", None))
         self.label.setText(_translate("Dialog", "    Enter Server IP", None))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    Dialog = QtGui.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     Dialog = QtGui.QDialog()
+#     ui = Ui_Dialog()
+#     ui.setupUi(Dialog)
+#     Dialog.show()
+#     sys.exit(app.exec_())
 

@@ -8,6 +8,8 @@ import feedparser
 import urllib2
 import audio_edit, Join
 from PySide.phonon import Phonon
+import socket
+import threading
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -193,11 +195,59 @@ class Ui_O(object):
         challengeCreate.back.clicked.connect(self.backChallenge_Time)
         challengeCreate.createChallenge.clicked.connect(self.serverCreate)
 
+    def timer1(self):
+        timer.timeout.connect(self.changeTimer)
+        timer.start(1000)
+
+    def changeTimer(self):
+        global s
+        s += 1
+        print s
+        if s==5:
+            print 'server closed'
+            timer.stop()
+            if Client1 == '':
+                print 'No one connected'
+            #startedServer.close()
+
     def serverCreate(self):
-        import server
-        startedServer = server.Server()
+        self.timer1()
+        print s
         print 'hllo'
-        startedServer.WaitForConnection()
+        self.bind()
+
+
+    def MyThread1(self):
+        Client, Adr=(self.s.accept())
+        print('Got a connection from: '+str(Client)+'.')
+        Client.send('hello, how r u'.encode())
+        a = Client.recv(1024).decode()
+        print a
+
+
+    def bind(self):
+        Adress=('',5000)
+        MaxClient=2
+        self.s = socket.socket()
+        self.s.bind(Adress)
+        self.s.listen(MaxClient)
+        print 'server listenig'
+        t1 = threading.Thread(target=MyThread1, args=[])
+        t1.start()
+        t1.join()
+
+    # def WaitForConnection(self):
+    #     MaxClient = 2
+    #     startedServer.bind(Adress)
+    #     startedServer.listen(MaxClient)
+
+    # while 1:
+    #     Client, Adr=(startedServer.accept())
+    #     print('Got a connection from: '+str(Client)+'.')
+    #     Client.send('hello, how r u'.encode())
+    #     a = Client.recv(1024).decode()
+    #     print a
+
 
     def backChallenge_Time(self):
         self.obj.hide()
@@ -235,6 +285,25 @@ class Ui_O(object):
         sessionMode.label.hide()
         joinChallenge.setupUi(self.obj)
         self.obj.show()
+        joinChallenge.joinchallenge.clicked.connect(self.clientJoin)
+
+    def clientJoin(self):
+        print 'hello'
+        joinChallenge.textEdit.setReadOnly(True)
+        a = joinChallenge.textEdit.toPlainText()
+        print a
+        self.clientConnect(a)
+
+    def clientConnect(self, adress):
+        Adress=('adress',5000)
+        print adress
+        import socket
+        self.s = socket.socket()
+        self.s.connect(Adress)
+        data = ''
+        data = s.recv(1024).decode()
+        print (data)
+        self.s.send('fine'.encode())
 
 #For going back 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>        
@@ -414,6 +483,7 @@ class Ui_O(object):
             print 'tick'
             timer.q += 1
         elif timer.q == 6:
+            timer.close()
             #self.selectParagraph()
             timer.q = 7
         else:
@@ -480,16 +550,20 @@ class Ui_O(object):
         wordObj.audio.hide()
         audioObj.setupUi(self.obj)
         audioObj.close.clicked.connect(self.closeApp)
-        audioObj.play.clicked.connect(self.playAudio)
+        audioObj.play.clicked.connect(self.makethread)
         audioObj.audioTextEdit.textChanged.connect(self.audioEdit)
         audioObj.finish.clicked.connect(self.resultWindow)
         audioObj.finish.clicked.connect(self.audioResult)
         self.obj.show()
         #Have to implement
 
+    def makethread(self):
+        audioObj.audioTextEdit.setReadOnly(False)
+        t2 = threading.Thread(target=self.playAudio, args=[])
+        t2.start()
+        
     def playAudio(self):
         print 'Audio playing'
-        audioObj.audioTextEdit.setReadOnly(False)
         global start_time
         start_time = time()
         import pyttsx
@@ -702,6 +776,7 @@ if __name__ == "__main__":
     file = open("username.txt","rw+")
     userText = file.read()
     wrongType = []
+    Client1 = ''
     i = 2
     input_l = 0
     para_l = 0
@@ -732,6 +807,7 @@ if __name__ == "__main__":
     wordMapChallenge = challengeWordMap.Ui_Form()
     timeChallenge = challengeTimeMap.Ui_Form()
     joinChallenge = Join.Ui_Dialog()
+    #startedServer = socket.socket()
     #media_obj = Phonon.MediaObject(O)
     #section for username
     username = QtGui.QWidget()
@@ -742,5 +818,6 @@ if __name__ == "__main__":
     #cretae a timer
     timer = QTimer()
     timer.q = 0
+    s = 0
     app.exec_()
     sys.exit(0)
