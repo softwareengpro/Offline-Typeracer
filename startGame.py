@@ -6,7 +6,7 @@ from time import time
 from PyQt4.QtCore import QTimer
 import feedparser
 import urllib2
-import audio_edit
+import audio_edit, Join
 from PySide.phonon import Phonon
 
 try:
@@ -191,6 +191,13 @@ class Ui_O(object):
         #timeMap.back.hide()
         wordMapChallenge.Back.hide()
         challengeCreate.back.clicked.connect(self.backChallenge_Time)
+        challengeCreate.createChallenge.clicked.connect(self.serverCreate)
+
+    def serverCreate(self):
+        import server
+        startedServer = server.Server()
+        print 'hllo'
+        startedServer.WaitForConnection()
 
     def backChallenge_Time(self):
         self.obj.hide()
@@ -219,6 +226,16 @@ class Ui_O(object):
         timeChallenge.Min3.clicked.connect(self.challengeCreate)
         self.obj.show()
 
+    def joinChallenge(self):
+        #self.obj.hide()
+        self.obj.hide()
+        sessionMode.practice_session.hide()
+        sessionMode.create_challenge.hide()
+        sessionMode.acceptchallenge.hide()
+        sessionMode.label.hide()
+        joinChallenge.setupUi(self.obj)
+        self.obj.show()
+
 #For going back 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>        
 
@@ -227,6 +244,7 @@ class Ui_O(object):
         self.setupUi(self.obj)
         sessionMode.back.hide()
         sessionMode.close.hide()
+        self.changeUserName.clicked.connect(ui.enterUsername)
         self.obj.show()
 
     def backword_session(self):
@@ -260,11 +278,6 @@ class Ui_O(object):
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    def joinChallenge(self):
-        sessionMode.practice_session.hide()
-        sessionMode.create_challenge.hide()
-        sessionMode.acceptchallenge.hide()
-        sessionMode.label.hide()
 
     def selectTopic(self):
         self.obj.hide()
@@ -435,7 +448,6 @@ class Ui_O(object):
 
     def selectNews(self):
         print "Have to implement"
-        self.update_news()
         lines = open('news.txt').read().splitlines()
         prac_sess.st = ""
         for j in lines:
@@ -563,6 +575,7 @@ class Ui_O(object):
         #app1 = QtGui.QApplication(sys.argv)
         usernameWin.setupUi(username)
         usernameWin.ok.clicked.connect(self.getUsername)
+        usernameWin.ok.clicked.connect(self.hideUsernameWindow)
         usernameWin.cancel.clicked.connect(self.hideUsernameWindow)
         username.show()
         #app1.exec_()
@@ -664,6 +677,11 @@ class Ui_O(object):
         Accurate = round(correctPercentage, 2)
         resultWin.userAccuracy.setText(str(Accurate))
 
+    def showName(self):
+        showUser = open('username.txt').read()
+        print showUser
+        self.showUserName.setText(str('   ' + 'Hello' + ' ' + showUser))
+
 
 """    def startInFive(self):
         d = QtGui.QDialog()
@@ -696,6 +714,8 @@ if __name__ == "__main__":
     O = QtGui.QWidget()
     ui = Ui_O()
     ui.setupUi(O)
+    ui.showName()
+    ui.changeUserName.clicked.connect(ui.enterUsername)
     O.show()
 
     #ui.update_currentAffairs()
@@ -711,6 +731,7 @@ if __name__ == "__main__":
     challengeCreate = createChallenge.Ui_Form()
     wordMapChallenge = challengeWordMap.Ui_Form()
     timeChallenge = challengeTimeMap.Ui_Form()
+    joinChallenge = Join.Ui_Dialog()
     #media_obj = Phonon.MediaObject(O)
     #section for username
     username = QtGui.QWidget()
