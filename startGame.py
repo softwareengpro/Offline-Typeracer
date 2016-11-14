@@ -219,7 +219,7 @@ class Ui_O(object):
 
     def MyThread1(self):
         Client, Adr=(self.s.accept())
-        print('Got a connection from: '+str(Client)+'.')
+        print 'Got a connection from: ' + str(Client) + '.'
         Client.send('hello, how r u'.encode())
         a = Client.recv(1024).decode()
         print a
@@ -232,9 +232,9 @@ class Ui_O(object):
         self.s.bind(Adress)
         self.s.listen(MaxClient)
         print 'server listenig'
-        t1 = threading.Thread(target=MyThread1, args=[])
+        t1 = threading.Thread(target=self.MyThread1, args=[])
         t1.start()
-        t1.join()
+        #t1.join()
 
     # def WaitForConnection(self):
     #     MaxClient = 2
@@ -290,12 +290,24 @@ class Ui_O(object):
     def clientJoin(self):
         print 'hello'
         joinChallenge.textEdit.setReadOnly(True)
-        a = joinChallenge.textEdit.toPlainText()
+        a = str(joinChallenge.textEdit.toPlainText())
         print a
-        self.clientConnect(a)
+        if a != '':
+            self.clientConnect(a)
+        else:
+            self.noIp()
+            joinChallenge.textEdit.setReadOnly(False)
+
+    def noIp(self):
+        d = QtGui.QDialog()
+        b1 = QtGui.QPushButton("First enter The IP",d)
+        b1.move(50,50)
+        d.setWindowTitle("Dialog")
+        #d.setWindowModality(Qt.ApplicationModal)
+        d.exec_()
 
     def clientConnect(self, adress):
-        Adress=('adress',5000)
+        Adress=(adress,5000)
         print adress
         import socket
         self.s = socket.socket()
