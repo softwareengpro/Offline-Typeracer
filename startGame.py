@@ -83,6 +83,7 @@ class Ui_O(object):
         self.showUserName.setFont(font)
         self.showUserName.setStyleSheet(_fromUtf8("alternate-background-color: rgb(255, 255, 255);"))
         self.showUserName.setObjectName(_fromUtf8("showUserName"))
+        self.showUserName.setReadOnly(True)
         self.changeUserName = QtGui.QPushButton(self.centralwidget)
         self.changeUserName.setGeometry(QtCore.QRect(470, 280, 111, 27))
         self.changeUserName.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
@@ -234,20 +235,6 @@ class Ui_O(object):
         print 'server listenig'
         t1 = threading.Thread(target=self.MyThread1, args=[])
         t1.start()
-        #t1.join()
-
-    # def WaitForConnection(self):
-    #     MaxClient = 2
-    #     startedServer.bind(Adress)
-    #     startedServer.listen(MaxClient)
-
-    # while 1:
-    #     Client, Adr=(startedServer.accept())
-    #     print('Got a connection from: '+str(Client)+'.')
-    #     Client.send('hello, how r u'.encode())
-    #     a = Client.recv(1024).decode()
-    #     print a
-
 
     def backChallenge_Time(self):
         self.obj.hide()
@@ -313,7 +300,7 @@ class Ui_O(object):
         self.s = socket.socket()
         self.s.connect(Adress)
         data = ''
-        data = s.recv(1024).decode()
+        data = self.s.recv(1024).decode()
         print (data)
         self.s.send('fine'.encode())
 
@@ -581,7 +568,12 @@ class Ui_O(object):
         import pyttsx
         engine = pyttsx.init()
         rate = engine.getProperty('rate')
-        engine.setProperty('rate', 10)
+        #voices = engine.getProperty('voices')
+        engine.setProperty('rate', 100)
+        # for voice in voices:
+        #     if voice.gender == "female":
+        #         engine.setProperty('female', voice.gender)
+        #         break
         global audioStr
         audioStr = 'Sally sells seashells by the seashore.'
         engine.say(audioStr)
@@ -662,14 +654,19 @@ class Ui_O(object):
         usernameWin.setupUi(username)
         usernameWin.ok.clicked.connect(self.getUsername)
         usernameWin.ok.clicked.connect(self.hideUsernameWindow)
+        usernameWin.ok.clicked.connect(self.showName)
         usernameWin.cancel.clicked.connect(self.hideUsernameWindow)
         username.show()
         #app1.exec_()
 
     def getUsername(self):
         user = usernameWin.username.text()
+        file = open('username.txt', 'rw+')
         file.write(user)
         userText = file.read()
+        file.close()
+
+        #usernameWin.username.setReadOnly(False)
         if userText != '':
             username.hide()
 
