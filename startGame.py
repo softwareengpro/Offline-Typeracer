@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow, createChallenge, challengeWordMap, challengeTimeMap
+import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow, createChallenge, challengeWordMap, challengeTimeMap, multiType
 from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
@@ -221,6 +221,7 @@ class Ui_O(object):
     def MyThread1(self):
         Client, Adr=(self.s.accept())
         print 'Got a connection from: ' + str(Client) + '.'
+        self.multiType()
         str = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         Client.send(str.encode())
         a = Client.recv(1024).decode()
@@ -274,11 +275,14 @@ class Ui_O(object):
         joinChallenge.setupUi(self.obj)
         self.obj.show()
         joinChallenge.joinchallenge.clicked.connect(self.clientJoin)
-        joinChallenge.joinchallenge.clicked.connect(self.mutiType)
+        joinChallenge.joinchallenge.clicked.connect(self.multiType)
 
     def multiType(self):
         self.obj.hide()
-        multiType.setupUi(self.obj)
+        joinChallenge.joinchallenge.hide()
+        joinChallenge.textEdit.hide()
+        joinChallenge.label.hide()
+        multiTypeObject.setupUi(self.obj)
         self.obj.show()
 
     def clientJoin(self):
@@ -286,6 +290,7 @@ class Ui_O(object):
         joinChallenge.textEdit.setReadOnly(True)
         a = str(joinChallenge.textEdit.toPlainText())
         print a
+        #print type(a)
         if a != '':
             self.clientConnect(a)
         else:
@@ -309,7 +314,7 @@ class Ui_O(object):
         data = ''
         data = self.s.recv(1024).decode()
         print (data)
-        joinchallenge.textEdit.setText("data");
+        multiTypeObject.showPara.setText("data");
         self.s.send('fine'.encode())
 
 #For going back 
@@ -490,7 +495,7 @@ class Ui_O(object):
             print 'tick'
             timer.q += 1
         elif timer.q == 6:
-            timer.close()
+            #timer.close()
             #self.selectParagraph()
             timer.q = 7
         else:
@@ -824,6 +829,7 @@ if __name__ == "__main__":
     wordMapChallenge = challengeWordMap.Ui_Form()
     timeChallenge = challengeTimeMap.Ui_Form()
     joinChallenge = Join.Ui_Dialog()
+    multiTypeObject = multiType.Ui_Form()
     #startedServer = socket.socket()
     #media_obj = Phonon.MediaObject(O)
     #section for username
