@@ -221,7 +221,8 @@ class Ui_O(object):
     def MyThread1(self):
         Client, Adr=(self.s.accept())
         print 'Got a connection from: ' + str(Client) + '.'
-        Client.send('hello, how r u'.encode())
+        str = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        Client.send(str.encode())
         a = Client.recv(1024).decode()
         print a
 
@@ -273,6 +274,12 @@ class Ui_O(object):
         joinChallenge.setupUi(self.obj)
         self.obj.show()
         joinChallenge.joinchallenge.clicked.connect(self.clientJoin)
+        joinChallenge.joinchallenge.clicked.connect(self.mutiType)
+
+    def multiType(self):
+        self.obj.hide()
+        multiType.setupUi(self.obj)
+        self.obj.show()
 
     def clientJoin(self):
         print 'hello'
@@ -302,6 +309,7 @@ class Ui_O(object):
         data = ''
         data = self.s.recv(1024).decode()
         print (data)
+        joinchallenge.textEdit.setText("data");
         self.s.send('fine'.encode())
 
 #For going back 
