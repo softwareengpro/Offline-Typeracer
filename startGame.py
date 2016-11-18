@@ -1,6 +1,6 @@
 from PyQt4 import QtCore, QtGui
 #from selectSession import Ui_Form
-import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow, createChallenge, challengeWordMap, challengeTimeMap
+import selectSession, Practice_start, wordMap, timeMap, random, re, usernameWindow, resultWindow, createChallenge, challengeWordMap, challengeTimeMap, multiType
 from time import time
 #from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import QTimer
@@ -83,6 +83,7 @@ class Ui_O(object):
         self.showUserName.setFont(font)
         self.showUserName.setStyleSheet(_fromUtf8("alternate-background-color: rgb(255, 255, 255);"))
         self.showUserName.setObjectName(_fromUtf8("showUserName"))
+        self.showUserName.setReadOnly(True)
         self.changeUserName = QtGui.QPushButton(self.centralwidget)
         self.changeUserName.setGeometry(QtCore.QRect(470, 280, 111, 27))
         self.changeUserName.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
@@ -220,7 +221,9 @@ class Ui_O(object):
     def MyThread1(self):
         Client, Adr=(self.s.accept())
         print 'Got a connection from: ' + str(Client) + '.'
-        Client.send('hello, how r u'.encode())
+        self.multiType()
+        str = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        Client.send(str.encode())
         a = Client.recv(1024).decode()
         print a
 
@@ -234,20 +237,6 @@ class Ui_O(object):
         print 'server listenig'
         t1 = threading.Thread(target=self.MyThread1, args=[])
         t1.start()
-        #t1.join()
-
-    # def WaitForConnection(self):
-    #     MaxClient = 2
-    #     startedServer.bind(Adress)
-    #     startedServer.listen(MaxClient)
-
-    # while 1:
-    #     Client, Adr=(startedServer.accept())
-    #     print('Got a connection from: '+str(Client)+'.')
-    #     Client.send('hello, how r u'.encode())
-    #     a = Client.recv(1024).decode()
-    #     print a
-
 
     def backChallenge_Time(self):
         self.obj.hide()
@@ -274,6 +263,7 @@ class Ui_O(object):
         timeChallenge.Min1.clicked.connect(self.challengeCreate)
         timeChallenge.Min2.clicked.connect(self.challengeCreate)
         timeChallenge.Min3.clicked.connect(self.challengeCreate)
+        timeChallenge.back.clicked.connect(self.backTime_word)
         self.obj.show()
 
     def joinChallenge(self):
@@ -286,12 +276,22 @@ class Ui_O(object):
         joinChallenge.setupUi(self.obj)
         self.obj.show()
         joinChallenge.joinchallenge.clicked.connect(self.clientJoin)
+        joinChallenge.joinchallenge.clicked.connect(self.multiType)
+
+    def multiType(self):
+        self.obj.hide()
+        joinChallenge.joinchallenge.hide()
+        joinChallenge.textEdit.hide()
+        joinChallenge.label.hide()
+        multiTypeObject.setupUi(self.obj)
+        self.obj.show()
 
     def clientJoin(self):
         print 'hello'
         joinChallenge.textEdit.setReadOnly(True)
         a = str(joinChallenge.textEdit.toPlainText())
         print a
+        #print type(a)
         if a != '':
             self.clientConnect(a)
         else:
@@ -313,8 +313,9 @@ class Ui_O(object):
         self.s = socket.socket()
         self.s.connect(Adress)
         data = ''
-        data = s.recv(1024).decode()
+        data = self.s.recv(1024).decode()
         print (data)
+        multiTypeObject.showPara.setText("data");
         self.s.send('fine'.encode())
 
 #For going back 
@@ -326,6 +327,7 @@ class Ui_O(object):
         sessionMode.back.hide()
         sessionMode.close.hide()
         self.changeUserName.clicked.connect(ui.enterUsername)
+        self.Score.clicked.connect(self.resultWindow)
         self.obj.show()
 
     def backword_session(self):
@@ -384,6 +386,7 @@ class Ui_O(object):
                 response=urllib2.urlopen('http://google.com',timeout=timeout)
                 print "you are connect with internet"
                 self.update_currentAffairs()
+                self.update_news()
                 self.sessionPracticeGK()
                 self.selectNews()
                 return True
@@ -476,6 +479,7 @@ class Ui_O(object):
         prac_sess.setupUi(self.obj)
         self.obj.show()
         wordObj.gk.hide()
+        wordObj.back.hide()
         #prac_sess.start_Timer()
         timer.timeout.connect(self.startIn)
         timer.start(1000)
@@ -495,7 +499,7 @@ class Ui_O(object):
             print 'tick'
             timer.q += 1
         elif timer.q == 6:
-            timer.close()
+            #timer.close()
             #self.selectParagraph()
             timer.q = 7
         else:
@@ -581,7 +585,12 @@ class Ui_O(object):
         import pyttsx
         engine = pyttsx.init()
         rate = engine.getProperty('rate')
-        engine.setProperty('rate', 10)
+        #voices = engine.getProperty('voices')
+        engine.setProperty('rate', 100)
+        # for voice in voices:
+        #     if voice.gender == "female":
+        #         engine.setProperty('female', voice.gender)
+        #         break
         global audioStr
         audioStr = 'Sally sells seashells by the seashore.'
         engine.say(audioStr)
@@ -652,24 +661,60 @@ class Ui_O(object):
         self.result = QtGui.QDialog()
         resultWin.setupUi(self.result)
         #hBoxLayout = QHBoxLayout()
+        # file = open('result.txt', 'r')
+        # user = file.read().splitlines()
+        # file.close()
         self.result.show()
-        resultWin.typeTime.setText("Total")
-        resultWin.userWPM.setText("W")
-        resultWin.userAccuracy.setText("A")
+        # user[0] = user[0].strip(' ')
+        # print user[0]
+        # print userText
+        d = {}
+        with open("result.txt") as f:
+            for line in f:
+                (key, val) = line.split()
+                print key
+                print val
+                d[key] = val
+        if d['usernam'] == userText:
+            #print d
+            resultWin.typeTime.setText(d['total_time'])
+            resultWin.userWPM.setText(d['wpm'])
+            resultWin.userAccuracy.setText(d['Accuracy'])
+        else:
+            self.result.hide()
+            print "You are a new User"
+            d = QtGui.QDialog()
+            b1 = QtGui.QPushButton("You are a new user",d)
+            b1.move(50,50)
+            d.setWindowTitle("Dialog")
+            #d.setWindowModality(Qt.ApplicationModal)
+            d.exec_()
+
+
 
     def enterUsername(self):
         #app1 = QtGui.QApplication(sys.argv)
         usernameWin.setupUi(username)
         usernameWin.ok.clicked.connect(self.getUsername)
         usernameWin.ok.clicked.connect(self.hideUsernameWindow)
+        usernameWin.ok.clicked.connect(self.showName)
         usernameWin.cancel.clicked.connect(self.hideUsernameWindow)
         username.show()
         #app1.exec_()
 
     def getUsername(self):
         user = usernameWin.username.text()
+        userl = len(user)
+        print userl
+        file = open('username.txt', 'w')
+        print user
         file.write(user)
-        userText = file.read()
+        file.close()
+        file = open('username.txt', 'r')
+        userText = file.read().splitlines()
+        file.close()
+
+        #usernameWin.username.setReadOnly(False)
         if userText != '':
             username.hide()
 
@@ -736,6 +781,8 @@ class Ui_O(object):
         print start_time
         total_time = (end_time - start_time)/60
         print total_time
+        global result
+        result = 'total_time' + ' ' + str(total_time)
         resultWin.typeTime.setText(str(total_time))
         print input_l
         word_length = float(input_l/4)
@@ -749,6 +796,8 @@ class Ui_O(object):
         #print word_p_m
         wpm = round(word_p_m, 2)
         print wpm
+        global result1
+        result1 = 'wpm' + ' ' + str(wpm)
         resultWin.userWPM.setText(str(wpm))
         self.accuracy()
 
@@ -761,6 +810,12 @@ class Ui_O(object):
         correctPercentage = (float(correct)/float(k)) * 100
         print "Accuracy"
         Accurate = round(correctPercentage, 2)
+        global result2
+        result2 = 'Accuracy' + ' ' + str(Accurate)
+        print result + ' \n' +  result1+ ' \n' + result2
+        resu = open('result.txt', 'rw+')
+        resu.write('usernam' + ' ' + userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
+        resu.close()
         resultWin.userAccuracy.setText(str(Accurate))
 
     def showName(self):
@@ -794,6 +849,9 @@ if __name__ == "__main__":
     para_l = 0
     audioStr = ''
     audioEditStr = ''
+    result = ''
+    result1 = ''
+    result2 = ''
 
     start_time = time()
     print start_time
@@ -803,6 +861,7 @@ if __name__ == "__main__":
     ui.setupUi(O)
     ui.showName()
     ui.changeUserName.clicked.connect(ui.enterUsername)
+    ui.Score.clicked.connect(ui.resultWindow)
     O.show()
 
     #ui.update_currentAffairs()
@@ -819,6 +878,7 @@ if __name__ == "__main__":
     wordMapChallenge = challengeWordMap.Ui_Form()
     timeChallenge = challengeTimeMap.Ui_Form()
     joinChallenge = Join.Ui_Dialog()
+    multiTypeObject = multiType.Ui_Form()
     #startedServer = socket.socket()
     #media_obj = Phonon.MediaObject(O)
     #section for username
