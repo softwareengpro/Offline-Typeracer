@@ -263,6 +263,7 @@ class Ui_O(object):
         timeChallenge.Min1.clicked.connect(self.challengeCreate)
         timeChallenge.Min2.clicked.connect(self.challengeCreate)
         timeChallenge.Min3.clicked.connect(self.challengeCreate)
+        timeChallenge.back.clicked.connect(self.backTime_word)
         self.obj.show()
 
     def joinChallenge(self):
