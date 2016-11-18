@@ -210,15 +210,34 @@ class Ui_O(object):
         global s
         s += 1
         print s
-        if s==5:
-            print 'server closed'
-            self.s.close()
-            print self.s
-            timer.stop()
-            if Client == 1:
-                print 'No one connected'
-            else:
+        # if s==5:
+        #     print 'server closed'
+        #     self.s.close()
+        #     print self.s
+        #     timer.stop()
+        if Client != 1 and cont != 1:
                 print "get a connection"
+                #timer.stop()
+                global cont
+                cont = 1
+                self.multiType1()
+                multiTypeObject.showPara.setText(st)
+        else:
+            if s==60 and client == 1:
+                print "no one connected"
+                print "server closed"
+                self.s.close()
+                d = QtGui.QDialog()
+                b1 = QtGui.QPushButton("Timeout, Recreate challenge",d)
+                b1.move(80,50)
+                d.setWindowTitle("Dialog")
+                #d.setWindowModality(Qt.ApplicationModal)
+                d.exec_()
+                timer.stop()
+                #self.selectMode()
+        # else:
+        #     if Client != 1:
+
 
 
     def serverCreate(self):
@@ -230,11 +249,13 @@ class Ui_O(object):
 
     def MyThread1(self):
         global Client
+        global st
         Client, Adr=(self.s.accept())
-        print 'Got a connection from: ' + str(Client) + '.'
-        self.multiType()
-        str = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        Client.send(str.encode())
+        print type(Client)
+        print 'Got a connection from: '# + str(Client) + '.'
+        #self.multiType()
+        st = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        Client.send(st.encode())
         a = Client.recv(1024).decode()
         print a
 
@@ -313,11 +334,10 @@ class Ui_O(object):
 
     def multiType1(self):
         self.obj.hide()
-        # joinChallenge.joinchallenge.hide()
-        # joinChallenge.textEdit.hide()
-        # joinChallenge.label.hide()
         multiTypeObject.setupUi(self.obj)
         self.obj.show()
+        timer.timeout.connect(self.startIn1)
+        timer.start(1000)
 
     def clientJoin(self):
         print 'hello'
@@ -348,6 +368,7 @@ class Ui_O(object):
         data = ''
         data = self.s.recv(1024).decode()
         print (data)
+        self.multiType()
         multiTypeObject.showPara.setText("data");
         self.s.send('fine'.encode())
 
@@ -534,10 +555,31 @@ class Ui_O(object):
         elif timer.q == 6:
             #timer.close()
             #self.selectParagraph()
-            timer.q = 7
-        else:
+            timer.stop()
             prac_sess.editPara.setReadOnly(False)
             self.begin_time = time()
+            timer.q = 0
+
+
+
+    def startIn1(self):
+        #ui = Ui_Form()
+        #print "not call startIn"
+        #q = self.timer.q
+        if timer.q < 6:
+            multiTypeObject.update_progressbar(timer.q)
+            #print self
+            print 'tick'
+            timer.q += 1
+        elif timer.q == 6:
+            #timer.close()
+            #self.selectParagraph()
+            multiTypeObject.editPara.setReadOnly(False)
+
+            self.begin_time = time()
+
+            timer.stop()
+            timer.q = 0
 
     def selectParagraph(self):
         import time
@@ -638,14 +680,14 @@ class Ui_O(object):
         audioObj.audioTextEdit.setReadOnly(False)
 
     def audioResult(self):
-        tm, line = self.counter()
+        tm, line = self.count()
         tm = round(tm, 2)
         words_per_minute = self.Wpm(tm, line)
         words_per_minute = round(words_per_minute, 2)
         #percentage = self.wordcheck(line)
         #percentager = round(percentage, 2)
 
-    def counter(self):
+    def count(self):
         i = 0 
         end_time = time()
         print end_time
@@ -798,6 +840,10 @@ class Ui_O(object):
         prac_sess.finish.hide()
         prac_sess.label.hide()
         prac_sess.label_2.hide()
+        self.showUserName.setReadOnly(False)
+        self.showUserName.setText(str(userText))
+        print userText
+        self.showUserName.setReadOnly(True)
         self.setupUi(self.obj)
         self.startgame.show()
         self.close.show()
@@ -893,6 +939,8 @@ if __name__ == "__main__":
     result1 = ''
     result2 = ''
     Client = 1
+    st = ''
+    cont = 0
 
     start_time = time()
     print start_time
