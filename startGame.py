@@ -326,6 +326,7 @@ class Ui_O(object):
         sessionMode.back.hide()
         sessionMode.close.hide()
         self.changeUserName.clicked.connect(ui.enterUsername)
+        self.Score.clicked.connect(self.resultWindow)
         self.obj.show()
 
     def backword_session(self):
@@ -384,6 +385,7 @@ class Ui_O(object):
                 response=urllib2.urlopen('http://google.com',timeout=timeout)
                 print "you are connect with internet"
                 self.update_currentAffairs()
+                self.update_news()
                 self.sessionPracticeGK()
                 self.selectNews()
                 return True
@@ -476,6 +478,7 @@ class Ui_O(object):
         prac_sess.setupUi(self.obj)
         self.obj.show()
         wordObj.gk.hide()
+        wordObj.back.hide()
         #prac_sess.start_Timer()
         timer.timeout.connect(self.startIn)
         timer.start(1000)
@@ -657,21 +660,21 @@ class Ui_O(object):
         self.result = QtGui.QDialog()
         resultWin.setupUi(self.result)
         #hBoxLayout = QHBoxLayout()
-        file = open('result.txt', 'r')
-        user = file.read().splitlines()
-        file.close()
+        # file = open('result.txt', 'r')
+        # user = file.read().splitlines()
+        # file.close()
         self.result.show()
-        user[0] = user[0].strip(' ')
-        print user[0]
-        print userText
-        if user[0] == userText:
-            d = {}
-            with open("result.txt") as f:
-                for line in f:
-                    (key, val) = line.split()
-                    print key
-                    print val
-                    d[key] = val
+        # user[0] = user[0].strip(' ')
+        # print user[0]
+        # print userText
+        d = {}
+        with open("result.txt") as f:
+            for line in f:
+                (key, val) = line.split()
+                print key
+                print val
+                d[key] = val
+        if d['usernam'] == userText:
             #print d
             resultWin.typeTime.setText(d['total_time'])
             resultWin.userWPM.setText(d['wpm'])
@@ -679,6 +682,13 @@ class Ui_O(object):
         else:
             self.result.hide()
             print "You are a new User"
+            d = QtGui.QDialog()
+            b1 = QtGui.QPushButton("You are a new user",d)
+            b1.move(50,50)
+            d.setWindowTitle("Dialog")
+            #d.setWindowModality(Qt.ApplicationModal)
+            d.exec_()
+
 
 
     def enterUsername(self):
@@ -693,9 +703,14 @@ class Ui_O(object):
 
     def getUsername(self):
         user = usernameWin.username.text()
-        file = open('username.txt', 'rw+')
+        userl = len(user)
+        print userl
+        file = open('username.txt', 'w')
+        print user
         file.write(user)
-        userText = file.read()
+        file.close()
+        file = open('username.txt', 'r')
+        userText = file.read().splitlines()
         file.close()
 
         #usernameWin.username.setReadOnly(False)
@@ -798,7 +813,7 @@ class Ui_O(object):
         result2 = 'Accuracy' + ' ' + str(Accurate)
         print result + ' \n' +  result1+ ' \n' + result2
         resu = open('result.txt', 'rw+')
-        resu.write(userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
+        resu.write('usernam' + ' ' + userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
         resu.close()
         resultWin.userAccuracy.setText(str(Accurate))
 
