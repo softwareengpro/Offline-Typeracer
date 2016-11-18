@@ -657,10 +657,29 @@ class Ui_O(object):
         self.result = QtGui.QDialog()
         resultWin.setupUi(self.result)
         #hBoxLayout = QHBoxLayout()
+        file = open('result.txt', 'r')
+        user = file.read().splitlines()
+        file.close()
         self.result.show()
-        resultWin.typeTime.setText("Total")
-        resultWin.userWPM.setText("W")
-        resultWin.userAccuracy.setText("A")
+        user[0] = user[0].strip(' ')
+        print user[0]
+        print userText
+        if user[0] == userText:
+            d = {}
+            with open("result.txt") as f:
+                for line in f:
+                    (key, val) = line.split()
+                    print key
+                    print val
+                    d[key] = val
+            #print d
+            resultWin.typeTime.setText(d['total_time'])
+            resultWin.userWPM.setText(d['wpm'])
+            resultWin.userAccuracy.setText(d['Accuracy'])
+        else:
+            self.result.hide()
+            print "You are a new User"
+
 
     def enterUsername(self):
         #app1 = QtGui.QApplication(sys.argv)
@@ -746,6 +765,8 @@ class Ui_O(object):
         print start_time
         total_time = (end_time - start_time)/60
         print total_time
+        global result
+        result = 'total_time' + ' ' + str(total_time)
         resultWin.typeTime.setText(str(total_time))
         print input_l
         word_length = float(input_l/4)
@@ -759,6 +780,8 @@ class Ui_O(object):
         #print word_p_m
         wpm = round(word_p_m, 2)
         print wpm
+        global result1
+        result1 = 'wpm' + ' ' + str(wpm)
         resultWin.userWPM.setText(str(wpm))
         self.accuracy()
 
@@ -771,6 +794,12 @@ class Ui_O(object):
         correctPercentage = (float(correct)/float(k)) * 100
         print "Accuracy"
         Accurate = round(correctPercentage, 2)
+        global result2
+        result2 = 'Accuracy' + ' ' + str(Accurate)
+        print result + ' \n' +  result1+ ' \n' + result2
+        resu = open('result.txt', 'rw+')
+        resu.write(userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
+        resu.close()
         resultWin.userAccuracy.setText(str(Accurate))
 
     def showName(self):
@@ -804,6 +833,9 @@ if __name__ == "__main__":
     para_l = 0
     audioStr = ''
     audioEditStr = ''
+    result = ''
+    result1 = ''
+    result2 = ''
 
     start_time = time()
     print start_time
@@ -813,6 +845,7 @@ if __name__ == "__main__":
     ui.setupUi(O)
     ui.showName()
     ui.changeUserName.clicked.connect(ui.enterUsername)
+    ui.Score.clicked.connect(ui.resultWindow)
     O.show()
 
     #ui.update_currentAffairs()
