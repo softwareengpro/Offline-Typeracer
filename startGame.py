@@ -7,7 +7,7 @@ from PyQt4.QtCore import QTimer
 import feedparser
 import urllib2
 import audio_edit, Join
-from PySide.phonon import Phonon
+#from PySide.phonon import Phonon
 import socket
 import threading
 
@@ -92,6 +92,10 @@ class Ui_O(object):
         self.Score.setGeometry(QtCore.QRect(470, 400, 111, 27))
         self.Score.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
         self.Score.setObjectName(_fromUtf8("Score"))
+        self.Instrution = QtGui.QPushButton(self.centralwidget)
+        self.Instrution.setGeometry(QtCore.QRect(330, 500, 111, 27))
+        self.Instrution.setStyleSheet(_fromUtf8("color: rgb(0, 0, 49);"))
+        self.Instrution.setObjectName(_fromUtf8("Instrution"))
         #O.setCentralWidget(self.centralwidget)
         # self.statusbar = QtGui.QStatusBar(O)
         # self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -109,6 +113,7 @@ class Ui_O(object):
         self.showUserName.setText(_translate("O", "      Hello asdfg", None))
         self.changeUserName.setText(_translate("O", "Change Username", None))
         self.Score.setText(_translate("O", "Score", None))
+        self.Instrution.setText(_translate("0", "Instruction", None))
 
         self.close.clicked.connect(self.closeApp)
         if userText != '': 
@@ -153,6 +158,7 @@ class Ui_O(object):
         self.close.hide()
         self.showUserName.hide()
         self.changeUserName.hide()
+        self.Instrution.hide()
         self.Score.hide()
         sessionMode.close.clicked.connect(self.closeApp) 
         sessionMode.practice_session.clicked.connect(self.selectTopic)  
@@ -204,12 +210,35 @@ class Ui_O(object):
         global s
         s += 1
         print s
-        if s==5:
-            print 'server closed'
-            timer.stop()
-            if Client1 == '':
-                print 'No one connected'
-            #startedServer.close()
+        # if s==5:
+        #     print 'server closed'
+        #     self.s.close()
+        #     print self.s
+        #     timer.stop()
+        if Client != 1 and cont != 1:
+                print "get a connection"
+                #timer.stop()
+                global cont
+                cont = 1
+                self.multiType1()
+                multiTypeObject.showPara.setText(st)
+        else:
+            if s==60 and client == 1:
+                print "no one connected"
+                print "server closed"
+                self.s.close()
+                d = QtGui.QDialog()
+                b1 = QtGui.QPushButton("Timeout, Recreate challenge",d)
+                b1.move(80,50)
+                d.setWindowTitle("Dialog")
+                #d.setWindowModality(Qt.ApplicationModal)
+                d.exec_()
+                timer.stop()
+                #self.selectMode()
+        # else:
+        #     if Client != 1:
+
+
 
     def serverCreate(self):
         self.timer1()
@@ -219,11 +248,14 @@ class Ui_O(object):
 
 
     def MyThread1(self):
+        global Client
+        global st
         Client, Adr=(self.s.accept())
-        print 'Got a connection from: ' + str(Client) + '.'
-        self.multiType()
-        str = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        Client.send(str.encode())
+        print type(Client)
+        print 'Got a connection from: '# + str(Client) + '.'
+        #self.multiType()
+        st = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        Client.send(st.encode())
         a = Client.recv(1024).decode()
         print a
 
@@ -263,8 +295,22 @@ class Ui_O(object):
         timeChallenge.Min1.clicked.connect(self.challengeCreate)
         timeChallenge.Min2.clicked.connect(self.challengeCreate)
         timeChallenge.Min3.clicked.connect(self.challengeCreate)
-        timeChallenge.back.clicked.connect(self.backTime_word)
+        timeChallenge.Back.clicked.connect(self.backTime_wordChallenge)
         self.obj.show()
+
+    def backTime_wordChallenge(self):
+        self.obj.hide()
+        wordMapChallenge.setupUi(self.obj)
+        timeChallenge.Min1.hide()
+        timeChallenge.Min2.hide()
+        timeChallenge.Min3.hide()
+        timeChallenge.TimeMap.hide()
+        wordMapChallenge.Paragraph.clicked.connect(self.timeMapChallenge)
+        wordMapChallenge.News.clicked.connect(self.challengeCreate)
+        wordMapChallenge.Gk.clicked.connect(self.challengeCreate)
+        wordMapChallenge.Back.clicked.connect(self.backword_session)
+        self.obj.show()
+
 
     def joinChallenge(self):
         #self.obj.hide()
@@ -285,6 +331,13 @@ class Ui_O(object):
         joinChallenge.label.hide()
         multiTypeObject.setupUi(self.obj)
         self.obj.show()
+
+    def multiType1(self):
+        self.obj.hide()
+        multiTypeObject.setupUi(self.obj)
+        self.obj.show()
+        timer.timeout.connect(self.startIn1)
+        timer.start(1000)
 
     def clientJoin(self):
         print 'hello'
@@ -315,6 +368,7 @@ class Ui_O(object):
         data = ''
         data = self.s.recv(1024).decode()
         print (data)
+        self.multiType()
         multiTypeObject.showPara.setText("data");
         self.s.send('fine'.encode())
 
@@ -501,10 +555,31 @@ class Ui_O(object):
         elif timer.q == 6:
             #timer.close()
             #self.selectParagraph()
-            timer.q = 7
-        else:
+            timer.stop()
             prac_sess.editPara.setReadOnly(False)
             self.begin_time = time()
+            timer.q = 0
+
+
+
+    def startIn1(self):
+        #ui = Ui_Form()
+        #print "not call startIn"
+        #q = self.timer.q
+        if timer.q < 6:
+            multiTypeObject.update_progressbar(timer.q)
+            #print self
+            print 'tick'
+            timer.q += 1
+        elif timer.q == 6:
+            #timer.close()
+            #self.selectParagraph()
+            multiTypeObject.editPara.setReadOnly(False)
+
+            self.begin_time = time()
+
+            timer.stop()
+            timer.q = 0
 
     def selectParagraph(self):
         import time
@@ -605,14 +680,14 @@ class Ui_O(object):
         audioObj.audioTextEdit.setReadOnly(False)
 
     def audioResult(self):
-        tm, line = self.counter()
+        tm, line = self.count()
         tm = round(tm, 2)
         words_per_minute = self.Wpm(tm, line)
         words_per_minute = round(words_per_minute, 2)
         #percentage = self.wordcheck(line)
         #percentager = round(percentage, 2)
 
-    def counter(self):
+    def count(self):
         i = 0 
         end_time = time()
         print end_time
@@ -757,6 +832,7 @@ class Ui_O(object):
 
     #initial activity
     def firstActivity(self):
+        self.obj.hide()
         prac_sess.progressBar.hide()
         prac_sess.timeToStart.hide()
         prac_sess.showPara.hide()
@@ -764,9 +840,16 @@ class Ui_O(object):
         prac_sess.finish.hide()
         prac_sess.label.hide()
         prac_sess.label_2.hide()
+        self.showUserName.setReadOnly(False)
+        self.showUserName.setText(str(userText))
+        print userText
+        self.showUserName.setReadOnly(True)
         self.setupUi(self.obj)
         self.startgame.show()
         self.close.show()
+        self.changeUserName.clicked.connect(self.enterUsername)
+        self.Score.clicked.connect(self.resultWindow)
+        self.Instrution.clicked.connect(self.typingManual)
         self.obj.show()
 
     def begin_time(self):
@@ -823,6 +906,10 @@ class Ui_O(object):
         print showUser
         self.showUserName.setText(str('   ' + 'Hello' + ' ' + showUser))
 
+    def typingManual(self):
+        import webbrowser
+        webbrowser.open_new(r'Typing_manual.pdf')
+
 
 """    def startInFive(self):
         d = QtGui.QDialog()
@@ -843,7 +930,6 @@ if __name__ == "__main__":
     file = open("username.txt","rw+")
     userText = file.read()
     wrongType = []
-    Client1 = ''
     i = 2
     input_l = 0
     para_l = 0
@@ -852,6 +938,9 @@ if __name__ == "__main__":
     result = ''
     result1 = ''
     result2 = ''
+    Client = 1
+    st = ''
+    cont = 0
 
     start_time = time()
     print start_time
@@ -862,6 +951,7 @@ if __name__ == "__main__":
     ui.showName()
     ui.changeUserName.clicked.connect(ui.enterUsername)
     ui.Score.clicked.connect(ui.resultWindow)
+    ui.Instrution.clicked.connect(ui.typingManual)
     O.show()
 
     #ui.update_currentAffairs()
