@@ -215,10 +215,10 @@ class Ui_O(object):
         #     self.s.close()
         #     print self.s
         #     timer.stop()
+        global cont
         if Client != 1 and cont != 1:
                 print "get a connection"
                 #timer.stop()
-                global cont
                 cont = 1
                 self.multiType1()
                 multiTypeObject.showPara.setText(st)
@@ -518,7 +518,7 @@ class Ui_O(object):
         timer.start(1000)
         prac_sess.editPara.textChanged.connect(self.text_changed)
         prac_sess.finish.clicked.connect(self.firstActivity)
-        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.resultWindow1)
         prac_sess.finish.clicked.connect(self.final_time)
         #self.start_Timer()
         #prac_sess.practice_session()
@@ -539,7 +539,7 @@ class Ui_O(object):
         timer.start(1000)
         prac_sess.editPara.textChanged.connect(self.text_changed)
         prac_sess.finish.clicked.connect(self.firstActivity)
-        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.resultWindow1)
         prac_sess.finish.clicked.connect(self.final_time)
 
 
@@ -643,7 +643,7 @@ class Ui_O(object):
         audioObj.close.clicked.connect(self.closeApp)
         audioObj.play.clicked.connect(self.makethread)
         audioObj.audioTextEdit.textChanged.connect(self.audioEdit)
-        audioObj.finish.clicked.connect(self.resultWindow)
+        audioObj.finish.clicked.connect(self.resultWindow1)
         audioObj.finish.clicked.connect(self.audioResult)
         self.obj.show()
         #Have to implement
@@ -750,6 +750,7 @@ class Ui_O(object):
                 print key
                 print val
                 d[key] = val
+
         if d['usernam'] == userText:
             #print d
             resultWin.typeTime.setText(d['total_time'])
@@ -765,6 +766,10 @@ class Ui_O(object):
             #d.setWindowModality(Qt.ApplicationModal)
             d.exec_()
 
+    def resultWindow1(self):
+        self.result = QtGui.QDialog() 
+        resultWin.setupUi(self.result)
+        self.result.show()
 
 
     def enterUsername(self):
@@ -784,9 +789,12 @@ class Ui_O(object):
         file = open('username.txt', 'w')
         print user
         file.write(user)
-        file.close()
-        file = open('username.txt', 'r')
-        userText = file.read().splitlines()
+        #file.close()
+        #file = open('username.txt', 'r')
+        #userText = file.read().splitlines()
+        global userText
+        userText = user
+        print userText
         file.close()
 
         #usernameWin.username.setReadOnly(False)
