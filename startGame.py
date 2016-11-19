@@ -215,10 +215,10 @@ class Ui_O(object):
         #     self.s.close()
         #     print self.s
         #     timer.stop()
+        global cont
         if Client != 1 and cont != 1:
                 print "get a connection"
                 #timer.stop()
-                global cont
                 cont = 1
                 self.multiType1()
                 multiTypeObject.showPara.setText(st)
@@ -322,7 +322,6 @@ class Ui_O(object):
         joinChallenge.setupUi(self.obj)
         self.obj.show()
         joinChallenge.joinchallenge.clicked.connect(self.clientJoin)
-        joinChallenge.joinchallenge.clicked.connect(self.multiType)
 
     def multiType(self):
         self.obj.hide()
@@ -331,6 +330,8 @@ class Ui_O(object):
         joinChallenge.label.hide()
         multiTypeObject.setupUi(self.obj)
         self.obj.show()
+        timer.timeout.connect(self.startIn1)
+        timer.start(1000)
 
     def multiType1(self):
         self.obj.hide()
@@ -365,11 +366,12 @@ class Ui_O(object):
         import socket
         self.s = socket.socket()
         self.s.connect(Adress)
+        joinChallenge.joinchallenge.clicked.connect(self.multiType)
         data = ''
         data = self.s.recv(1024).decode()
         print (data)
         self.multiType()
-        multiTypeObject.showPara.setText("data");
+        multiTypeObject.showPara.setText(data);
         self.s.send('fine'.encode())
 
 #For going back 
@@ -518,7 +520,7 @@ class Ui_O(object):
         timer.start(1000)
         prac_sess.editPara.textChanged.connect(self.text_changed)
         prac_sess.finish.clicked.connect(self.firstActivity)
-        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.resultWindow1)
         prac_sess.finish.clicked.connect(self.final_time)
         #self.start_Timer()
         #prac_sess.practice_session()
@@ -539,7 +541,7 @@ class Ui_O(object):
         timer.start(1000)
         prac_sess.editPara.textChanged.connect(self.text_changed)
         prac_sess.finish.clicked.connect(self.firstActivity)
-        prac_sess.finish.clicked.connect(self.resultSection)
+        prac_sess.finish.clicked.connect(self.resultWindow1)
         prac_sess.finish.clicked.connect(self.final_time)
 
 
@@ -557,9 +559,26 @@ class Ui_O(object):
             #self.selectParagraph()
             timer.stop()
             prac_sess.editPara.setReadOnly(False)
-            self.begin_time = time()
-            timer.q = 0
+            self.begin_time()
+            timer.q = 7
+            self.timeSession()
 
+    def timeSession(self):
+        self.timeOutSession()
+
+    def timeOutSession(self):
+        timer.timeout.connect(self.timeUp)
+        timer.start(1000)
+
+    def timeUp(self):
+        global timeLimit
+        timeLimit = timeLimit + 1
+        print timeLimit
+        if timeLimit == 60:
+            self.resultWindow1()
+            self.firstActivity()
+            self.final_time()
+            timer.stop()
 
 
     def startIn1(self):
@@ -576,7 +595,7 @@ class Ui_O(object):
             #self.selectParagraph()
             multiTypeObject.editPara.setReadOnly(False)
 
-            self.begin_time = time()
+            self.begin_time()
 
             timer.stop()
             timer.q = 0
@@ -643,7 +662,7 @@ class Ui_O(object):
         audioObj.close.clicked.connect(self.closeApp)
         audioObj.play.clicked.connect(self.makethread)
         audioObj.audioTextEdit.textChanged.connect(self.audioEdit)
-        audioObj.finish.clicked.connect(self.resultWindow)
+        audioObj.finish.clicked.connect(self.resultWindow1)
         audioObj.finish.clicked.connect(self.audioResult)
         self.obj.show()
         #Have to implement
@@ -750,6 +769,7 @@ class Ui_O(object):
                 print key
                 print val
                 d[key] = val
+
         if d['usernam'] == userText:
             #print d
             resultWin.typeTime.setText(d['total_time'])
@@ -765,6 +785,10 @@ class Ui_O(object):
             #d.setWindowModality(Qt.ApplicationModal)
             d.exec_()
 
+    def resultWindow1(self):
+        self.result = QtGui.QDialog() 
+        resultWin.setupUi(self.result)
+        self.result.show()
 
 
     def enterUsername(self):
@@ -784,9 +808,12 @@ class Ui_O(object):
         file = open('username.txt', 'w')
         print user
         file.write(user)
-        file.close()
-        file = open('username.txt', 'r')
-        userText = file.read().splitlines()
+        #file.close()
+        #file = open('username.txt', 'r')
+        #userText = file.read().splitlines()
+        global userText
+        userText = user
+        print userText
         file.close()
 
         #usernameWin.username.setReadOnly(False)
@@ -820,6 +847,8 @@ class Ui_O(object):
             if mytext == prac_sess.st[0:input_l]:
                 print "match"
                 prac_sess.editPara.setStyleSheet("QTextEdit {color:black}")
+                correctType.append(prac_sess.st[input_l-1])
+                print correctType
             else: 
                 prac_sess.editPara.setStyleSheet("QTextEdit {color:red}")
                 wrongType.append(prac_sess.st[input_l-1])
@@ -853,6 +882,7 @@ class Ui_O(object):
         self.obj.show()
 
     def begin_time(self):
+        global start_time
         start_time = time()
         print start_time
         #return start_time
@@ -887,19 +917,25 @@ class Ui_O(object):
     def accuracy(self):
         print "have to implement"
         wrongType_l = len(wrongType)
-        k =len(prac_sess.st)
+        k = len(prac_sess.st)
+        corr =len(correctType)
+        print "k" + str(corr)
         #word_left = k - input_l
-        correct = float(k) - float(wrongType_l)
-        correctPercentage = (float(correct)/float(k)) * 100
-        print "Accuracy"
-        Accurate = round(correctPercentage, 2)
-        global result2
-        result2 = 'Accuracy' + ' ' + str(Accurate)
-        print result + ' \n' +  result1+ ' \n' + result2
-        resu = open('result.txt', 'rw+')
-        resu.write('usernam' + ' ' + userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
-        resu.close()
-        resultWin.userAccuracy.setText(str(Accurate))
+        if corr!=0:
+            #correct = float(corr) - float(wrongType_l)
+            total = float(corr) + float(wrongType_l)
+            correctPercentage = (float(corr)/float(total)) * 100
+            print "Accuracy"
+            Accurate = round(correctPercentage, 2)
+            global result2
+            result2 = 'Accuracy' + ' ' + str(Accurate)
+            print result + ' \n' +  result1+ ' \n' + result2
+            resu = open('result.txt', 'rw+')
+            resu.write('usernam' + ' ' + userText + ' \n' + result + ' \n' +  result1+ ' \n' + result2)
+            resu.close()
+            resultWin.userAccuracy.setText(str(Accurate))
+        else:
+            resultWin.userAccuracy.setText('0')
 
     def showName(self):
         showUser = open('username.txt').read()
@@ -930,6 +966,7 @@ if __name__ == "__main__":
     file = open("username.txt","rw+")
     userText = file.read()
     wrongType = []
+    correctType = []
     i = 2
     input_l = 0
     para_l = 0
@@ -941,6 +978,7 @@ if __name__ == "__main__":
     Client = 1
     st = ''
     cont = 0
+    timeLimit = 0
 
     start_time = time()
     print start_time
